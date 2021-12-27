@@ -1,10 +1,7 @@
 <template>
-  <div class="beer-list-screen">
+  <div class="beer-list-screen" v-show="isVisible">
     <h1>{{ msg }}</h1>
 
-    <!-- Buttons to choose list or grid view -->
-    <button onclick="listView()"><i class="fa fa-bars"></i>List</button>
-    <button onclick="gridView()"><i class="fa fa-th-large"></i>Grid</button>
     <div class="element-spacer"></div>
 
     <ul v-if="errors && errors.length">
@@ -14,20 +11,22 @@
     </ul>
 
     <ul class="beer-list">
-      <li v-for="beer in beers" v-bind:key="beer.id" class="beer-item">
-        <img class="beer-image" alt="Beer image" v-bind:src="beer.image_url">
-        <div class="beer-item-content">
-          <div class="beer-item-name">
-            {{beer.name}}
+      <li v-for="beer in beers" v-bind:key="beer.id">
+        <div class="beer-item" @click="showBeerDetails(beer)">
+          <img class="beer-image" alt="Beer image" v-bind:src="beer.image_url">
+          <div class="beer-item-content">
+            <div class="beer-item-name">
+              {{beer.name}}
+            </div>
+            <div class="beer-item-spacer"></div>
+            <div class="beer-item-tagline">
+              {{beer.tagline}}
+            </div>
+            <div class="beer-item-spacer"></div>
+            <div class="beer-item-abv">ABV: {{beer.abv}}</div>
+            <div class="beer-item-spacer"></div>
+            <div class="beer-item-description"><p>{{beer.description}}</p></div>
           </div>
-          <div class="beer-item-spacer"></div>
-          <div class="beer-item-tagline">
-            {{beer.tagline}}
-          </div>
-          <div class="beer-item-spacer"></div>
-          <div class="beer-item-abv">ABV: {{beer.abv}}</div>
-          <div class="beer-item-spacer"></div>
-          <div class="beer-item-description"><p>{{beer.description}}</p></div>
         </div>
       </li>
     </ul>
@@ -41,10 +40,21 @@ import axios from "axios";
 export default {
   name: 'BeerList',
   props: {
-    msg: String
+    // beerListVisible: Boolean,
+    msg: String,
+    selectedBeer: {
+      default: null,
+      type: Object
+    }
+  },
+  computed: {
+    isVisible() {
+      return this.$attrs.isVisible;
+    }
   },
   data () {
     return {
+      // isVisible: false,
       errors: [],
       beers: []
     }
@@ -52,11 +62,16 @@ export default {
   mounted () {
     axios
         .get('https://api.punkapi.com/v2/beers')
-        // .get('https://api.punkapi.com/v2/beers?ids=1|2|3|4|5')
         .then(response => (this.beers = response.data))
         .catch(e => {
           this.errors.push(e)
         })
+  },
+  methods: {
+    showBeerDetails: function(beer) {
+      this.$emit('selectBeer', beer);
+      console.info("Show details for beer", beer);
+    }
   }
 }
 

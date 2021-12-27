@@ -1,17 +1,48 @@
 <template>
   <div id="app">
-    <BeerList msg="Beers"/>
+    <BeerDetails msg="Beer Details" :isVisible="showBeerDetailsComponent" :selectedBeer="selectedBeer" @showBeerList="showBeerList"/>
+    <BeerList msg="Beers" :isVisible="showBeerListComponent" :selectedBeer="selectedBeer" @selectBeer="selectBeer"/>
   </div>
 </template>
 
 <script>
 import BeerList from "@/components/BeerList";
+import BeerDetails from "@/components/BeerDetails";
 
 export default {
   name: 'App',
-  components: {
-    BeerList
+  props: {
+    // selectedBeer: {
+    //   default: null,
+    //   type: Object
+    // }
   },
+  data () {
+    return {
+      showBeerDetailsComponent: false,
+      showBeerListComponent: true,
+      selectedBeer: null
+    }
+  },
+  components: {
+    BeerList,
+    BeerDetails
+  },
+  methods: {
+    selectBeer: function (beer) {
+      console.info("Show details for beer", beer);
+      this.selectedBeer = beer;
+      this.showBeerDetails();
+    },
+    showBeerList: function () {
+      this.showBeerDetailsComponent = false;
+      this.showBeerListComponent = true;
+    },
+    showBeerDetails: function () {
+      this.showBeerListComponent = false;
+      this.showBeerDetailsComponent = true;
+    }
+  }
 }
 
 </script>
