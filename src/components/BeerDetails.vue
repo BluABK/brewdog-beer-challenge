@@ -20,7 +20,7 @@
         <div class="beer-item-hops" v-if="beerIngredientsHops.length > 0">
           Hops:
           <ul>
-            <li v-for="hop in beerIngredientsHops" v-bind:key="hop.name">
+            <li v-for="(hop, i) in beerIngredientsHops" v-bind:key="'hops' + i + hop.name">
               <p>Name: {{hop.name}}</p>
               <p>Amount: {{hop.amount.value}} {{hop.amount.unit}}</p>
               <p>Add: {{hop.add}}</p>
@@ -31,7 +31,7 @@
         <div class="beer-item-malts" v-if="beerIngredientsMalts.length > 0">
           Malts:
           <ul>
-            <li v-for="malt in beerIngredientsMalts" v-bind:key="malt.name">
+            <li v-for="(malt, i) in beerIngredientsMalts" v-bind:key="'malt' + i + malt.name">
               <p>Name: {{malt.name}}</p>
               <p>Amount: {{malt.amount.value}} {{malt.amount.unit}}</p>
             </li>
@@ -44,7 +44,7 @@
           <li v-if="beerMethods.mash_temp.length > 0">
             <p>Mash temperatures:</p>
             <ul>
-              <li v-for="mashTemp in beerMethods.mash_temp" v-bind:key="mashTemp.temp">
+              <li v-for="(mashTemp, i) in beerMethods.mash_temp" v-bind:key="'mash_temp' + i + mashTemp.temp.value">
                 <p>{{mashTemp.duration}} minutes at {{mashTemp.temp.value}} {{mashTemp.temp.unit}}.</p>
               </li>
             </ul>
