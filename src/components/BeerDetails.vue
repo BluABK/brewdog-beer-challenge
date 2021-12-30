@@ -49,10 +49,19 @@
                       <p>Mash temperatures:</p>
                     </div>
                     <div class="methods-mashtemp-content" v-for="(mashTemp, i) in beerMethods.mash_temp" v-bind:key="'mash_temp' + i + mashTemp.temp.value">
-                      <p>
-                        <button class="timer-button app-button" @click="clickedTimerButton($event, mashTemp)" v-bind:value="mashTemp.duration">{{mashTemp.state}}</button> {{mashTemp.duration}} minutes at {{mashTemp.temp.value}} {{mashTemp.temp.unit}}.
-                        <span class="timer"></span>
-                      </p>
+                      <div v-if="mashTemp.duration == null">
+                        <p>
+                          <button class="double-state-button app-button" @click="clickedTwoStateButton($event, mashTemp)">
+                            {{mashTemp.state}}
+                          </button>
+                          {{mashTemp.temp.value}} {{mashTemp.temp.unit}}
+                        </p>
+                      </div>
+                      <div v-else>
+<!--                        <button class="timer-button app-button" @click="clickedTimerButton($event, mashTemp)" v-bind:value="mashTemp.duration">{{mashTemp.state}}</button> {{mashTemp.duration}} minutes at {{mashTemp.temp.value}} {{mashTemp.temp.unit}}.-->
+<!--                        <span class="timer"></span>-->
+                        <Countdown style="background-color: limegreen" :countableObject="mashTemp" :description="mashTemp.duration + ' minutes at ' + mashTemp.temp.value + ' ' + mashTemp.temp.unit"></Countdown>
+                      </div>
                     </div>
                   </div>
 
@@ -73,8 +82,10 @@
 </template>
 
 <script>
+import Countdown from "@/components/Countdown";
 export default {
   name: "BeerDetails",
+  components: {Countdown},
   props: {
     // beerDetailsVisible: Boolean,
     msg: String,
@@ -161,6 +172,8 @@ export default {
           if (this.selectedBeer.method.mash_temp.length > 0) {
             // Add in custom tracking of processing each item
             mashTemps = this.selectedBeer.method.mash_temp;
+            console.info("this.selectedBeer.method.mash_temp", this.selectedBeer.method.mash_temp);
+            console.info("mashTemps", mashTemps);
 
             for (let mashTemp of mashTemps) {
               mashTemp["state"] = "IDLE";
