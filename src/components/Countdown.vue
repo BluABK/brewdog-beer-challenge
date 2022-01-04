@@ -33,24 +33,28 @@ export default {
     }
   },
   watch: {
-    /**
-     * Watch for changes to enable/disable timer.
-     *
-     * @param enabled
-     */
     timerEnabled(enabled) {
       if (enabled === true) {
         this.timerHandle = setInterval(this.tick, 1000);
       } else {
         clearInterval(this.timerHandle);
       }
+      this.$emit('update:timerEnabled', this.timerEnabled);
     },
+    timeRemaining: {
+      handler() {
+        this.$emit('update:timeRemaining', this.timeRemaining);
+      },
+      immediate: true
+    },
+    timerState: {
+      handler() {
+        this.$emit('update:timerState', this.timerState);
+      },
+      immediate: true
+    }
   },
   methods: {
-    emitState: function () {
-      this.$emit('update:timerEnabled', this.timerEnabled);
-      this.$emit('update:timerState', this.timerState);
-    },
     tick: function () {
       if (this.timerEnabled) {
         if (this.timeRemaining > 0) {
@@ -58,21 +62,16 @@ export default {
         } else if (this.timeRemaining === 0) {
           this.timerEnabled = false;
           this.timerState = "DONE";
-          this.emitState();
         }
-
-        this.$emit('update:timeRemaining', this.timeRemaining);
       }
     },
     pause: function() {
       this.timerEnabled = false;
       this.timerState = "PAUSED";
-      this.emitState();
     },
     start: function () {
       this.timerEnabled = true;
       this.timerState = "RUNNING";
-      this.emitState();
     },
     clickedButton: function () {
       // If there is still time remaining, process timer logic.

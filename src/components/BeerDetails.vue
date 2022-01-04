@@ -63,7 +63,6 @@
                                    :description="beerMethods.mash_temp[i].duration + ' minutes at ' + beerMethods.mash_temp[i].temp.value + ' ' + beerMethods.mash_temp[i].temp.unit"
                                    v-bind:timeRemaining.sync="beerMethods.mash_temp[i].time_remaining"
                                    v-bind:timerState.sync="beerMethods.mash_temp[i].state"
-                                   v-on:update:timerEnabled="updateTimerState"
                         ></Countdown>
                       </div>
                     </div>
@@ -229,20 +228,6 @@ export default {
       event.target.textContent = obj.state;
       // this.updateBeer();
     },
-    // updateTimedEntryTimeRemaining: function (number) {
-    //   console.log(event);
-    //   console.log(obj);
-    //   obj.state = "RUNNING";
-    //   event.target.textContent = obj.state;
-    //   // this.updateBeer();
-    // },
-    updateTimerState: function (enabled) {
-      // console.log(event);
-      console.log('updateTimerState', enabled);
-      // obj.state = "RUNNING";
-      // event.target.textContent = obj.state;
-      // this.updateBeer();
-    }
   }
 }
 </script>
