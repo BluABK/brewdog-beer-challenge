@@ -3,10 +3,9 @@
     <button class="action-button" @click="clickedButton()" :disabled="disabled">
       {{state}}
     </button>
-    <span v-if="this.step != null">
-      [{{step}}]
+    <span class="description">
+      {{description}}
     </span>
-     {{description}}
   </div>
 </template>
 
@@ -14,10 +13,6 @@
 export default {
   name: "IngredientEntry",
   props: {
-    description: {
-      default: "Description N/A",
-      type: String
-    },
     initState: {
       default: "IDLE",
       type: String
@@ -25,11 +20,69 @@ export default {
     step: {
       default: null,
       type: String,
-      // immutable: true
     },
     initDisabled: {
       default: false,
       type: Boolean
+    },
+    amount: {
+      default: null,
+      type: Number
+    },
+    unit: {
+      default: null,
+      type: String
+    },
+    name: {
+      default: null,
+      type: String
+    },
+    attribute: {
+      default: null,
+      type: String
+    },
+    twist: {
+      default: null,
+      type: String
+    }
+  },
+  computed: {
+    /**
+     * Builds a description string based on provided properties.
+     * @returns {string}
+     */
+    description() {
+      let s = "";
+      let spacing = "";
+
+      if (this.step) {
+        s+= `${spacing}[${this.step}]`;
+        spacing = " ";
+      }
+      if (this.amount) {
+        s+= `${spacing}${this.amount}`;
+        spacing = " ";
+      }
+      if (this.unit) {
+        s+= `${spacing}${this.unit}`;
+        spacing = " ";
+      }
+      if (this.name) {
+        s+= `${spacing}${this.name}`;
+        spacing = " ";
+      }
+      if (this.attribute) {
+        s+= `${spacing}(${this.attribute})`;
+        spacing = " ";
+      }
+      if (this.twist) {
+        s+= `${spacing}(${this.twist})`;
+        spacing = " ";
+      }
+
+      if (s.length > 0) s += '.';
+
+      return s;
     }
   },
   data() {

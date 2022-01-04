@@ -27,7 +27,10 @@
                         :step="beerIngredientsHops[i].add"
                         :initState="beerIngredientsHops[i].state"
                         :initDisabled="true"
-                        :description="beerIngredientsHops[i].amount.value + ' ' + beerIngredientsHops[i].amount.unit + ' ' + beerIngredientsHops[i].name + ' (' + beerIngredientsHops[i].attribute + ')'"
+                        :amount="beerIngredientsHops[i].amount.value"
+                        :unit="beerIngredientsHops[i].amount.unit"
+                        :name="beerIngredientsHops[i].name"
+                        :attribute="beerIngredientsHops[i].attribute"
                         v-bind:state.sync="beerIngredientsHops[i].state" />
                   </div>
               </div>
@@ -36,7 +39,9 @@
                   <div class="malts-content" v-for="(malt, i) in beerIngredientsMalts" v-bind:key="'malt' + i + malt.name">
                     <IngredientEntry
                         :initState="beerIngredientsMalts[i].state"
-                        :description="beerIngredientsMalts[i].amount.value + ' ' + beerIngredientsHops[i].amount.unit + ' ' + beerIngredientsHops[i].name + ' (' + beerIngredientsHops[i].attribute + ')'"
+                        :amount="beerIngredientsMalts[i].amount.value"
+                        :unit="beerIngredientsMalts[i].amount.unit"
+                        :name="beerIngredientsMalts[i].name"
                         v-bind:state.sync="beerIngredientsMalts[i].state" />
                   </div>
               </div>
@@ -54,7 +59,8 @@
                         />
                         <IngredientEntry v-else
                             :initState="beerMethods.mash_temp[i].state"
-                            :description="beerMethods.mash_temp[i].temp.value + ' ' + beerMethods.mash_temp[i].temp.unit"
+                            :amount="beerMethods.mash_temp[i].temp.value"
+                            :unit="beerMethods.mash_temp[i].temp.unit"
                             v-bind:state.sync="beerMethods.mash_temp[i].state"
                         />
                     </div>
@@ -64,7 +70,8 @@
                     <h1 class="">Fermentation</h1>
                     <IngredientEntry
                                      :initState="beerMethods.fermentation.state"
-                                     :description="beerMethods.fermentation.temp.value + ' ' + beerMethods.fermentation.temp.unit"
+                                     :amount="beerMethods.fermentation.temp.value"
+                                     :unit="beerMethods.fermentation.temp.unit"
                                      v-bind:state.sync="beerMethods.fermentation.state"
                     />
                   </div>
@@ -73,7 +80,7 @@
                     <h1>Twist</h1>
                     <IngredientEntry
                         :initState="beerMethods.twist_state"
-                        :description="beerMethods.twist"
+                        :twist="beerMethods.twist"
                         v-bind:state.sync="beerMethods.twist_state" />
                   </div>
               </div> <!-- beer-item-methods //-->
