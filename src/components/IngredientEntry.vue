@@ -51,6 +51,7 @@ export default {
       if (this.disabled) return;
 
       this.state = "DONE";
+      this.disabled = true;
     }
   }
 }
