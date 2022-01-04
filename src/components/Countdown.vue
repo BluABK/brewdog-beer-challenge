@@ -1,7 +1,7 @@
 <template>
   <div class="countdown-element">
     <button class="action-button" @click="clickedButton()">
-      {{state}}
+      {{timerState}}
     </button>
     {{description}} [Remaining: {{timeRemaining}} seconds]
   </div>
@@ -11,78 +11,77 @@
 export default {
   name: "Countdown",
   props: {
-    countableObject: {
-      default: null,
-      type: Object
-    },
     description: {
       default: "Description N/A",
       type: String
-    },
-    info: {
-      default: "Info N/A",
-      type: String
-    },
-    duration: {
-      default: null,
-      type: Number
     },
     initialTime: {
       default: null,
       type: Number
     },
-    initialState: {
-      default: null,
+    initialTimerState: {
+      default: "IDLE",
       type: String
-    },
+    }
   },
   data() {
     return {
       timeRemaining: this.initialTime,
       timerEnabled: false,
-      state: this.initialState,
-      timerHandle: null
+      timerState: this.initialTimerState,
+      timerHandle: null,
     }
-  },
-  computed: {
-
   },
   watch: {
     /**
      * Watch for changes to enable/disable timer.
      *
-     * When
      * @param enabled
      */
     timerEnabled(enabled) {
       if (enabled === true) {
-        this.timerHandle = setInterval(this.tickTimer, 1000);
+        this.timerHandle = setInterval(this.tick, 1000);
       } else {
         clearInterval(this.timerHandle);
       }
     },
   },
   methods: {
-    tickTimer: function () {
+    emitState: function () {
+      this.$emit('update:timerEnabled', this.timerEnabled);
+      this.$emit('update:timerState', this.timerState);
+    },
+    tick: function () {
       if (this.timerEnabled) {
-        this.timeRemaining--;
+        if (this.timeRemaining > 0) {
+          this.timeRemaining--;
+        } else if (this.timeRemaining === 0) {
+          this.timerEnabled = false;
+          this.timerState = "DONE";
+          this.emitState();
+        }
+
+        this.$emit('update:timeRemaining', this.timeRemaining);
       }
     },
-    pauseTimer: function() {
-      this.state = "PAUSED";
+    pause: function() {
       this.timerEnabled = false;
-      console.info("paused timer");
+      this.timerState = "PAUSED";
+      this.emitState();
     },
-    startTimer: function () {
-      this.state = "RUNNING";
+    start: function () {
       this.timerEnabled = true;
-      console.info("started timer");
+      this.timerState = "RUNNING";
+      this.emitState();
     },
     clickedButton: function () {
-      if (this.state === "IDLE" || this.state === "PAUSED") {
-        this.startTimer();
-      } else if (this.state === "RUNNING") {
-        this.pauseTimer();
+      // If there is still time remaining, process timer logic.
+      if (this.timeRemaining > 0) {
+        if (!this.timerEnabled) {
+          this.start();
+        } else if (this.timerEnabled) {
+          this.pause();
+        }
       }
     }
   }

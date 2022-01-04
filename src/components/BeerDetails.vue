@@ -58,10 +58,13 @@
                         </p>
                       </div>
                       <div v-else>
-<!--                        <button class="timer-button app-button" @click="clickedTimerButton($event, mashTemp)" v-bind:value="mashTemp.duration">{{mashTemp.state}}</button> {{mashTemp.duration}} minutes at {{mashTemp.temp.value}} {{mashTemp.temp.unit}}.-->
-<!--                        <span class="timer"></span>-->
-<!--                        <Countdown style="background-color: limegreen" :countableObject="mashTemp" :description="mashTemp.duration + ' minutes at ' + mashTemp.temp.value + ' ' + mashTemp.temp.unit"></Countdown>-->
-                        <Countdown style="background-color: limegreen" :countableObject="beerMethods.mash_temp[i]" :initialState="beerMethods.mash_temp[i].state" :duration="beerMethods.mash_temp[i].duration" :initialTime="beerMethods.mash_temp[i].time_remaining" :description="beerMethods.mash_temp[i].duration + ' minutes at ' + beerMethods.mash_temp[i].temp.value + ' ' + beerMethods.mash_temp[i].temp.unit"></Countdown>
+                        <Countdown style="background-color: limegreen"
+                                   :initialTime="beerMethods.mash_temp[i].time_remaining"
+                                   :description="beerMethods.mash_temp[i].duration + ' minutes at ' + beerMethods.mash_temp[i].temp.value + ' ' + beerMethods.mash_temp[i].temp.unit"
+                                   v-bind:timeRemaining.sync="beerMethods.mash_temp[i].time_remaining"
+                                   v-bind:timerState.sync="beerMethods.mash_temp[i].state"
+                                   v-on:update:timerEnabled="updateTimerState"
+                        ></Countdown>
                       </div>
                     </div>
                   </div>
@@ -226,11 +229,18 @@ export default {
       event.target.textContent = obj.state;
       // this.updateBeer();
     },
-    clickedTimerButton: function (event, obj) {
-      console.log(event);
-      console.log(obj);
-      obj.state = "RUNNING";
-      event.target.textContent = obj.state;
+    // updateTimedEntryTimeRemaining: function (number) {
+    //   console.log(event);
+    //   console.log(obj);
+    //   obj.state = "RUNNING";
+    //   event.target.textContent = obj.state;
+    //   // this.updateBeer();
+    // },
+    updateTimerState: function (enabled) {
+      // console.log(event);
+      console.log('updateTimerState', enabled);
+      // obj.state = "RUNNING";
+      // event.target.textContent = obj.state;
       // this.updateBeer();
     }
   }
