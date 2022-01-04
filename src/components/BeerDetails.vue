@@ -179,7 +179,7 @@ export default {
             for (let mashTemp of mashTemps) {
               mashTemp["state"] = "IDLE";
               // Convert duration in minutes to more easily computable seconds.
-              mashTemp["time_remaining"] = mashTemp.duration * 3600
+              mashTemp["time_remaining"] = mashTemp.duration * 60
             }
           }
         }
