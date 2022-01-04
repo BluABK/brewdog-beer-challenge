@@ -68,6 +68,10 @@ export default {
         })
   },
   methods: {
+    /**
+     * Shows beer details of given beer object.
+     * @param beer Beer object.
+     */
     showBeerDetails: function(beer) {
       this.$emit('selectBeer', beer);
       console.info("Show details for beer", beer);

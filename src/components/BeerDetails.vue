@@ -51,16 +51,17 @@
                     <div class="methods-mashtemp-content" v-for="(mashTemp, i) in beerMethods.mash_temp" v-bind:key="'mash_temp' + i + mashTemp.temp.value">
                       <div v-if="mashTemp.duration == null">
                         <p>
-                          <button class="double-state-button app-button" @click="clickedTwoStateButton($event, mashTemp)">
-                            {{mashTemp.state}}
+                          <button class="double-state-button app-button" @click="clickedTwoStateButton($event, beerMethods.mash_temp[i])">
+                            {{beerMethods.mash_temp[i].state}}
                           </button>
-                          {{mashTemp.temp.value}} {{mashTemp.temp.unit}}
+                          {{beerMethods.mash_temp[i].temp.value}} {{beerMethods.mash_temp[i].temp.unit}}
                         </p>
                       </div>
                       <div v-else>
 <!--                        <button class="timer-button app-button" @click="clickedTimerButton($event, mashTemp)" v-bind:value="mashTemp.duration">{{mashTemp.state}}</button> {{mashTemp.duration}} minutes at {{mashTemp.temp.value}} {{mashTemp.temp.unit}}.-->
 <!--                        <span class="timer"></span>-->
-                        <Countdown style="background-color: limegreen" :countableObject="mashTemp" :description="mashTemp.duration + ' minutes at ' + mashTemp.temp.value + ' ' + mashTemp.temp.unit"></Countdown>
+<!--                        <Countdown style="background-color: limegreen" :countableObject="mashTemp" :description="mashTemp.duration + ' minutes at ' + mashTemp.temp.value + ' ' + mashTemp.temp.unit"></Countdown>-->
+                        <Countdown style="background-color: limegreen" :countableObject="beerMethods.mash_temp[i]" :initialState="beerMethods.mash_temp[i].state" :duration="beerMethods.mash_temp[i].duration" :initialTime="beerMethods.mash_temp[i].time_remaining" :description="beerMethods.mash_temp[i].duration + ' minutes at ' + beerMethods.mash_temp[i].temp.value + ' ' + beerMethods.mash_temp[i].temp.unit"></Countdown>
                       </div>
                     </div>
                   </div>
@@ -207,18 +208,30 @@ export default {
     // Own
     showBeerList: function(beer) {
       this.$emit('showBeerList');
+
+      // Emit the updated beer object to parent upon exiting current screen.
+      // this.$emit('selectBeer', this.selectedBeer);
       this.$emit('selectBeer', null);
+
       console.info("Show beer list", beer);
     },
+    // /**
+    //  * Emits the updated beer object to parent.
+    //  */
+    // updateBeer: function() {
+    //   this.$emit('updateBeer');
+    // },
     clickedTwoStateButton: function (event, obj) {
       obj.state = "DONE";
       event.target.textContent = obj.state;
+      // this.updateBeer();
     },
     clickedTimerButton: function (event, obj) {
       console.log(event);
       console.log(obj);
       obj.state = "RUNNING";
       event.target.textContent = obj.state;
+      // this.updateBeer();
     }
   }
 }
