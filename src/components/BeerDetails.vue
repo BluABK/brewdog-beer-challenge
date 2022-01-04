@@ -23,57 +23,58 @@
               <div class="hops ingredients-element" v-if="beerIngredientsHops.length > 0">
                 <div class="hops-heading ingredients-heading">Hops</div>
                   <div class="hops-content" v-for="(hop, i) in beerIngredientsHops" v-bind:key="'hops' + i + hop.name">
-                    <p>
-                      <button class="double-state-button app-button" @click="clickedTwoStateButton($event, hop)">
-                        {{hop.state}}
-                      </button>
-                      [Add: {{hop.add}}] {{hop.amount.value}} {{hop.amount.unit}} {{hop.name}} ({{hop.attribute}})
-                    </p>
+                    <IngredientEntry
+                        :step="beerIngredientsHops[i].add"
+                        :initState="beerIngredientsHops[i].state"
+                        :initDisabled="true"
+                        :description="beerIngredientsHops[i].amount.value + ' ' + beerIngredientsHops[i].amount.unit + ' ' + beerIngredientsHops[i].name + ' (' + beerIngredientsHops[i].attribute + ')'"
+                        v-bind:state.sync="beerIngredientsHops[i].state" />
                   </div>
               </div>
               <div class="malts ingredients-element" v-if="beerIngredientsMalts.length > 0">
                 <div class="malts-heading ingredients-heading">Malts</div>
                   <div class="malts-content" v-for="(malt, i) in beerIngredientsMalts" v-bind:key="'malt' + i + malt.name">
-                    <p>
-                      <button class="double-state-button app-button" @click="clickedTwoStateButton($event, malt)">
-                        {{malt.state}}
-                      </button>
-                      {{malt.amount.value}} {{malt.amount.unit}} {{malt.name}}
-                    </p>
+                    <IngredientEntry
+                        :initState="beerIngredientsMalts[i].state"
+                        :description="beerIngredientsMalts[i].amount.value + ' ' + beerIngredientsHops[i].amount.unit + ' ' + beerIngredientsHops[i].name + ' (' + beerIngredientsHops[i].attribute + ')'"
+                        v-bind:state.sync="beerIngredientsMalts[i].state" />
                   </div>
               </div>
               <div class="methods ingredients-element">
                 <div class="methods-heading ingredients-heading">Methods</div>
-                  <div v-if="beerMethods.mash_temp.length > 0">
-                    <div class="methods-mashtemp-heading">
-                      <p>Mash temperatures:</p>
-                    </div>
+
+                  <div class="methods-subheading" v-if="beerMethods.mash_temp.length > 0">
+                    <h1>Mash temperatures</h1>
                     <div class="methods-mashtemp-content" v-for="(mashTemp, i) in beerMethods.mash_temp" v-bind:key="'mash_temp' + i + mashTemp.temp.value">
-                      <div v-if="mashTemp.duration == null">
-                        <p>
-                          <button class="double-state-button app-button" @click="clickedTwoStateButton($event, beerMethods.mash_temp[i])">
-                            {{beerMethods.mash_temp[i].state}}
-                          </button>
-                          {{beerMethods.mash_temp[i].temp.value}} {{beerMethods.mash_temp[i].temp.unit}}
-                        </p>
-                      </div>
-                      <div v-else>
-                        <Countdown style="background-color: limegreen"
-                                   :initialTime="beerMethods.mash_temp[i].time_remaining"
-                                   :description="beerMethods.mash_temp[i].duration + ' minutes at ' + beerMethods.mash_temp[i].temp.value + ' ' + beerMethods.mash_temp[i].temp.unit"
-                                   v-bind:timeRemaining.sync="beerMethods.mash_temp[i].time_remaining"
-                                   v-bind:timerState.sync="beerMethods.mash_temp[i].state"
-                        ></Countdown>
-                      </div>
+                        <Countdown v-if="mashTemp.duration"
+                            :initialTime="beerMethods.mash_temp[i].time_remaining"
+                            :description="beerMethods.mash_temp[i].duration + ' minutes at ' + beerMethods.mash_temp[i].temp.value + ' ' + beerMethods.mash_temp[i].temp.unit"
+                            v-bind:timeRemaining.sync="beerMethods.mash_temp[i].time_remaining"
+                            v-bind:timerState.sync="beerMethods.mash_temp[i].state"
+                        />
+                        <IngredientEntry v-else
+                            :initState="beerMethods.mash_temp[i].state"
+                            :description="beerMethods.mash_temp[i].temp.value + ' ' + beerMethods.mash_temp[i].temp.unit"
+                            v-bind:state.sync="beerMethods.mash_temp[i].state"
+                        />
                     </div>
                   </div>
 
-                  <div class="methods-fermentation" v-if="beerMethods.fermentation">
-                    <p>Fermentation: <button class="double-state-button app-button" @click="clickedTwoStateButton($event, beerMethods.fermentation)">{{beerMethods.fermentation.state}}</button>{{beerMethods.fermentation.temp.value}} {{beerMethods.fermentation.temp.unit}}.</p>
+                  <div class="methods-fermentation methods-subheading" v-if="beerMethods.fermentation">
+                    <h1 class="">Fermentation</h1>
+                    <IngredientEntry
+                                     :initState="beerMethods.fermentation.state"
+                                     :description="beerMethods.fermentation.temp.value + ' ' + beerMethods.fermentation.temp.unit"
+                                     v-bind:state.sync="beerMethods.fermentation.state"
+                    />
                   </div>
 
-                  <div class="methods-twist" v-if="beerMethods.twist">
-                    <p>Twist: {{beerMethods.twist}}.</p>
+                  <div class="methods-twist methods-subheading" v-if="beerMethods.twist">
+                    <h1>Twist</h1>
+                    <IngredientEntry
+                        :initState="beerMethods.twist_state"
+                        :description="beerMethods.twist"
+                        v-bind:state.sync="beerMethods.twist_state" />
                   </div>
               </div> <!-- beer-item-methods //-->
             </div> <!-- ingredients-content //-->
@@ -86,9 +87,10 @@
 
 <script>
 import Countdown from "@/components/Countdown";
+import IngredientEntry from "@/components/IngredientEntry";
 export default {
   name: "BeerDetails",
-  components: {Countdown},
+  components: {Countdown, IngredientEntry},
   props: {
     // beerDetailsVisible: Boolean,
     msg: String,
@@ -166,17 +168,13 @@ export default {
       let mashTemps = [];
       let fermentation = null;
       let twist = null;
+      let twistState = null;
 
       if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "method")) {
-        fermentation = this.selectedBeer.method.fermentation;
-        twist = this.selectedBeer.method.twist;
-
         if (Object.hasOwn(this.selectedBeer.method, "mash_temp")) {
           if (this.selectedBeer.method.mash_temp.length > 0) {
             // Add in custom tracking of processing each item
             mashTemps = this.selectedBeer.method.mash_temp;
-            console.info("this.selectedBeer.method.mash_temp", this.selectedBeer.method.mash_temp);
-            console.info("mashTemps", mashTemps);
 
             for (let mashTemp of mashTemps) {
               mashTemp["state"] = "IDLE";
@@ -185,12 +183,27 @@ export default {
             }
           }
         }
+
+        if (Object.hasOwn(this.selectedBeer.method, "fermentation")) {
+          // Add in custom tracking of processing the fermentation
+          fermentation = this.selectedBeer.method.fermentation;
+          fermentation["state"] = "IDLE";
+        }
+
+        if (Object.hasOwn(this.selectedBeer.method, "twist")) {
+          if (this.selectedBeer.method.twist != null) {
+            // Add in custom tracking of processing the twist
+            twist = this.selectedBeer.method.twist;
+            twistState = "IDLE";
+          }
+        }
       }
 
       return {
         mash_temp: mashTemps,
         fermentation: fermentation,
-        twist: twist
+        twist: twist,
+        twist_state: twistState
       };
     }
   },
@@ -223,11 +236,6 @@ export default {
     // updateBeer: function() {
     //   this.$emit('updateBeer');
     // },
-    clickedTwoStateButton: function (event, obj) {
-      obj.state = "DONE";
-      event.target.textContent = obj.state;
-      // this.updateBeer();
-    },
   }
 }
 </script>
@@ -310,6 +318,15 @@ ul {
   text-align: center;
   font-weight: bold;
   font-size: 125%;
+}
+
+.methods-subheading {
+  padding-bottom: 5px;
+}
+
+.methods-subheading h1 {
+  font-weight: bold;
+  font-size: 100%;
 }
 
 </style>
