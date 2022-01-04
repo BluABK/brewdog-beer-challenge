@@ -31,59 +31,42 @@ export default {
       default: null,
       type: Number
     },
-    // timerEnabled: {
-    //   default: false,
-    //   type: Boolean
-    // },
     initialState: {
       default: null,
       type: String
-    }
+    },
   },
   data() {
     return {
       timeRemaining: this.initialTime,
       timerEnabled: false,
-      state: this.initialState
+      state: this.initialState,
+      timerHandle: null
     }
   },
   computed: {
-    // timeRemaining() {
-    //   if (this.countableObject != null) {
-    //     if (Object.hasOwn(this.countableObject, "duration")) return this.countableObject.duration;
-    //   }
-    //
-    //   return null;
-    // },
+
   },
   watch: {
-    timerEnabled(value) {
-      if (value) {
-        setTimeout(() => {
-          this.timeRemaining--;
-        }, 1000);
+    /**
+     * Watch for changes to enable/disable timer.
+     *
+     * When
+     * @param enabled
+     */
+    timerEnabled(enabled) {
+      if (enabled === true) {
+        this.timerHandle = setInterval(this.tickTimer, 1000);
+      } else {
+        clearInterval(this.timerHandle);
       }
     },
-    timeRemaining: {
-      handler(value) {
-        if (value > 0 && this.timerEnabled) {
-          setTimeout(() => {
-              this.timeRemaining--;
-          }, 1000);
-        } else if (value === 0) {
-          this.state = "DONE";
-        }
-      },
-      immediate: true // Ensure watcher is triggered upon creation.
-    }
   },
   methods: {
-    async countdownTimer() {
-      while (this.timeRemaining > 0) {
+    tickTimer: function () {
+      if (this.timerEnabled) {
         this.timeRemaining--;
       }
-
-      this.state = "DONE";
     },
     pauseTimer: function() {
       this.state = "PAUSED";
