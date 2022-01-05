@@ -2,20 +2,23 @@
   <div class="method-mashtemps-container">
     <div class="mashtemp-content" v-for="(mashTemp, i) in this.computedMashTemps" v-bind:key="'mashTemp' + i + mashTemp.temp.value">
       <Countdown v-if="mashTemp.duration"
-                 :initialTime="mashTemp.time_remaining"
-                 :description="mashTemp.duration + ' minutes at ' + mashTemp.temp.value + ' ' + mashTemp.temp.unit"
+                 :initState="mashTemp.state"
+                 :initDisabled="stepIsDisabled(mashTemp)"
+                 :initTime="mashTemp.time_remaining"
+                 :duration="mashTemp.duration"
+                 :amount="mashTemp.temp.value"
+                 :unit="mashTemp.temp.unit"
                  :timeRemaining.sync="mashTemp.time_remaining"
-                 :timerState.sync="mashTemp.state"
                  :state.sync="mashTemp.state"
                  :disabled.sync="mashTemp.disabled"
       />
       <IngredientEntry v-else
-                       :initState="mashTemp.state"
-                       :initDisabled="stepIsDisabled(mashTemp)"
-                       :amount="mashTemp.temp.value"
-                       :unit="mashTemp.temp.unit"
-                       :state.sync="mashTemp.state"
-                       :disabled.sync="mashTemp.disabled"
+                 :initState="mashTemp.state"
+                 :initDisabled="stepIsDisabled(mashTemp)"
+                 :amount="mashTemp.temp.value"
+                 :unit="mashTemp.temp.unit"
+                 :state.sync="mashTemp.state"
+                 :disabled.sync="mashTemp.disabled"
       />
     </div>
   </div>

@@ -1,9 +1,9 @@
 <template>
   <div class="countdown-element">
-    <button class="action-button" @click="clickedButton()">
-      {{timerState}}
+    <button class="action-button" @click="clickedButton()" :disabled="disabled">
+      {{state}}
     </button>
-    {{description}} [Remaining: {{timeRemaining}} seconds]
+    {{description}} <span v-if="this.state !== 'IDLE' && this.timeRemaining > 0">[Remaining: {{timeRemaining}} seconds]</span>
   </div>
 </template>
 
@@ -11,25 +11,75 @@
 export default {
   name: "Countdown",
   props: {
-    description: {
-      default: "Description N/A",
-      type: String
-    },
-    initialTime: {
+    initTime: {
       default: null,
       type: Number
     },
-    initialTimerState: {
+    initState: {
       default: "IDLE",
       type: String
-    }
+    },
+    initDisabled: {
+      default: false,
+      type: Boolean
+    },
+    isDisabled: {
+      default: null,
+      type: Boolean
+    },
+    duration: {
+      default: null,
+      type: Number
+    },
+    amount: {
+      default: null,
+      type: Number
+    },
+    unit: {
+      default: null,
+      type: String
+    },
   },
   data() {
     return {
-      timeRemaining: this.initialTime,
+      timeRemaining: this.initTime,
       timerEnabled: false,
-      timerState: this.initialTimerState,
+      state: this.initState,
       timerHandle: null,
+    }
+  },
+  computed: {
+    disabled: function() {
+      if (this.isDisabled) {
+        return this.isDisabled;
+      }
+
+      return this.initDisabled;
+    },
+    /**
+     * Builds a description string based on provided properties.
+     * @returns {string}
+     */
+    description() {
+      let s = "";
+      let spacing = "";
+
+      if (this.duration) {
+        s+= `${spacing}${this.duration} minutes`;
+        spacing = " ";
+      }
+      if (this.amount) {
+        s+= `${spacing}at ${this.amount}`;
+        spacing = " ";
+      }
+      if (this.unit) {
+        s+= `${spacing}${this.unit}`;
+        spacing = " ";
+      }
+
+      if (s.length > 0) s += '.';
+
+      return s;
     }
   },
   watch: {
@@ -47,9 +97,15 @@ export default {
       },
       immediate: true
     },
-    timerState: {
+    state: {
       handler() {
-        this.$emit('update:timerState', this.timerState);
+        this.$emit('update:state', this.state);
+      },
+      immediate: true
+    },
+    disabled: {
+      handler() {
+        this.$emit('update:disabled', this.disabled);
       },
       immediate: true
     }
@@ -61,17 +117,21 @@ export default {
           this.timeRemaining--;
         } else if (this.timeRemaining === 0) {
           this.timerEnabled = false;
-          this.timerState = "DONE";
+          this.setDone();
         }
       }
     },
     pause: function() {
       this.timerEnabled = false;
-      this.timerState = "PAUSED";
+      this.state = "PAUSED";
     },
     start: function () {
       this.timerEnabled = true;
-      this.timerState = "RUNNING";
+      this.state = "RUNNING";
+    },
+    setDone: function() {
+      this.state = "DONE";
+      this.$emit("update:disabled", true);
     },
     clickedButton: function () {
       // If there is still time remaining, process timer logic.
