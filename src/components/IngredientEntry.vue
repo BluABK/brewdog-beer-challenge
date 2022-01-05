@@ -29,10 +29,6 @@ export default {
       default: null,
       type: Boolean
     },
-    hasState: {
-      default: null,
-      type: String
-    },
     amount: {
       default: null,
       type: Number
@@ -84,7 +80,7 @@ export default {
         spacing = " ";
       }
       if (this.twist) {
-        s+= `${spacing}(${this.twist})`;
+        s+= `${spacing}${this.twist}`;
         spacing = " ";
       }
 

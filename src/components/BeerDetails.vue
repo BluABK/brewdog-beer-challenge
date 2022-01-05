@@ -33,20 +33,7 @@
 
                   <div class="methods-subheading" v-if="beerMethods.mash_temp.length > 0">
                     <h1>Mash temperatures</h1>
-                    <div class="methods-mashtemp-content" v-for="(mashTemp, i) in beerMethods.mash_temp" v-bind:key="'mash_temp' + i + mashTemp.temp.value">
-                        <Countdown v-if="mashTemp.duration"
-                            :initialTime="beerMethods.mash_temp[i].time_remaining"
-                            :description="beerMethods.mash_temp[i].duration + ' minutes at ' + beerMethods.mash_temp[i].temp.value + ' ' + beerMethods.mash_temp[i].temp.unit"
-                            v-bind:timeRemaining.sync="beerMethods.mash_temp[i].time_remaining"
-                            v-bind:timerState.sync="beerMethods.mash_temp[i].state"
-                        />
-                        <IngredientEntry v-else
-                            :initState="beerMethods.mash_temp[i].state"
-                            :amount="beerMethods.mash_temp[i].temp.value"
-                            :unit="beerMethods.mash_temp[i].temp.unit"
-                            v-bind:state.sync="beerMethods.mash_temp[i].state"
-                        />
-                    </div>
+                    <MethodMashTempList :initMashTemps="beerMethods.mash_temp"/>
                   </div>
 
                   <div class="methods-fermentation methods-subheading" v-if="beerMethods.fermentation">
@@ -76,13 +63,13 @@
 </template>
 
 <script>
-import Countdown from "@/components/Countdown";
 import IngredientEntry from "@/components/IngredientEntry";
 import HopsList from "@/components/HopsList";
 import MaltsList from "@/components/MaltsList";
+import MethodMashTempList from "@/components/MethodMashTempList";
 export default {
   name: "BeerDetails",
-  components: {HopsList, MaltsList, Countdown, IngredientEntry},
+  components: {MethodMashTempList, HopsList, MaltsList, IngredientEntry},
   props: {
     msg: String,
     initBeer: {
@@ -147,6 +134,7 @@ export default {
           // Add in custom tracking of processing each item
           for (let i = 0; i < this.selectedBeer.ingredients.malt.length; i++) {
             this.$set(this.selectedBeer.ingredients.malt[i], "state", "IDLE");
+            this.$set(this.selectedBeer.ingredients.malt[i], "disabled", null);
           }
 
           return this.selectedBeer.ingredients.malt;
@@ -163,29 +151,39 @@ export default {
 
       if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "method")) {
         if (Object.hasOwn(this.selectedBeer.method, "mash_temp")) {
+          mashTemps = this.selectedBeer.method.mash_temp;
+
           if (this.selectedBeer.method.mash_temp.length > 0) {
             // Add in custom tracking of processing each item
-            mashTemps = this.selectedBeer.method.mash_temp;
-
-            for (let mashTemp of mashTemps) {
-              mashTemp["state"] = "IDLE";
+            for (let i = 0; i < this.selectedBeer.method.mash_temp.length; i++) {
               // Convert duration in minutes to more easily computable seconds.
-              mashTemp["time_remaining"] = mashTemp.duration * 60
+              let timeRemaining = this.selectedBeer.method.mash_temp[i].duration * 60;
+
+              // Add in custom tracking of processing the mash temp
+              this.$set(this.selectedBeer.method.mash_temp[i], "state", "IDLE");
+              this.$set(this.selectedBeer.method.mash_temp[i], "disabled", null);
+              this.$set(this.selectedBeer.method.mash_temp[i], "time_remaining", timeRemaining);
             }
           }
         }
 
         if (Object.hasOwn(this.selectedBeer.method, "fermentation")) {
-          // Add in custom tracking of processing the fermentation
           fermentation = this.selectedBeer.method.fermentation;
-          fermentation["state"] = "IDLE";
+
+          // Add in custom tracking of processing the fermentation
+          this.$set(this.selectedBeer.method.fermentation, "state", "IDLE");
+          this.$set(this.selectedBeer.method.fermentation, "disabled", null);
         }
 
         if (Object.hasOwn(this.selectedBeer.method, "twist")) {
+          twist = this.selectedBeer.method.twist;
+
           if (this.selectedBeer.method.twist != null) {
-            // Add in custom tracking of processing the twist
-            twist = this.selectedBeer.method.twist;
             twistState = "IDLE";
+
+            // Add in custom tracking of processing the twist
+            this.$set(this.selectedBeer.method, "twist_state", twistState);
+            this.$set(this.selectedBeer.method, "twist_disabled", null);
           }
         }
       }
