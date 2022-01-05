@@ -135,12 +135,8 @@ export default {
         if (Object.hasOwn(this.selectedBeer, "ingredients")) {
           if (this.selectedBeer.ingredients != null && Object.hasOwn(this.selectedBeer.ingredients, "hops")) {
             // Add in custom tracking of processing each item
-            // let hops = this.selectedBeer.ingredients.hops;
-
             for (let i = 0; i < this.selectedBeer.ingredients.hops.length; i++) {
-              // hop["state"] = "IDLE";
               this.$set(this.selectedBeer.ingredients.hops[i], "state", "IDLE");
-              // hop["disabled"] = null;
               this.$set(this.selectedBeer.ingredients.hops[i], "disabled", null);
             }
 
@@ -156,8 +152,6 @@ export default {
       if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "ingredients")) {
         if (this.selectedBeer.ingredients != null && Object.hasOwn(this.selectedBeer.ingredients, "malt")) {
           // Add in custom tracking of processing each item
-          // let malts = this.selectedBeer.ingredients.malt;
-
           for (let i = 0; i < this.selectedBeer.ingredients.malt.length; i++) {
             this.$set(this.selectedBeer.ingredients.malt[i], "state", "IDLE");
           }

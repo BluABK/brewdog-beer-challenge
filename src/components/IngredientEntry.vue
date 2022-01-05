@@ -29,6 +29,10 @@ export default {
       default: null,
       type: Boolean
     },
+    hasState: {
+      default: null,
+      type: String
+    },
     amount: {
       default: null,
       type: Number
@@ -98,8 +102,7 @@ export default {
   },
   data() {
     return {
-      state: this.initState,
-      // disabled: this.initDisabled
+      state: this.initState
     }
   },
   watch: {
@@ -119,8 +122,7 @@ export default {
   methods: {
     setDone: function() {
       this.state = "DONE";
-      this.disabled = true;
-      this.$emit('done')
+      this.$emit("update:disabled", true);
     },
     clickedButton: function () {
       if (this.disabled) return;
