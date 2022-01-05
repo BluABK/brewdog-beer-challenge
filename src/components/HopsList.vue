@@ -1,16 +1,16 @@
 <template>
   <div class="hops-container">
-    <div class="hops-content" v-for="(hop, i) in this.computedHops" v-bind:key="'hops' + i + hop.name">
+    <div class="hops-content" v-for="(hop, i) in this.computedHops" :key="'hops' + i + hop.name">
       <IngredientEntry
           :step="hop.add"
           :initState="hop.state"
-          :initDisabled="hop.disabled"
+          :initDisabled="stepIsDisabled(hop)"
           :amount="hop.amount.value"
           :unit="hop.amount.unit"
           :name="hop.name"
           :attribute="hop.attribute"
-          v-bind:state.sync="hop.state"
-          v-bind:disabled.sync="hop.disabled"
+          :state.sync="hop.state"
+          :disabled.sync="hop.disabled"
           @done="entryStateChanged(i)"
       />
     </div>
@@ -28,10 +28,10 @@ export default {
       default: null,
       type: Array
     },
-    propButtonStates: {
-      default: null,
-      type: Array
-    }
+    // propButtonStates: {
+    //   default: null,
+    //   type: Array
+    // }
   },
   computed: {
     // changedStates() {
@@ -53,23 +53,24 @@ export default {
     //   return items;
     // },
 
-    buttonStates: function() {
-      if (this.hops.length === 0) return [];
-      let items = [];
-
-      for (let hop of this.hops) {
-        console.debug("hop", hop);
-        items.push(this.stepIsDisabled(hop.add));
-      }
-
-      return items;
-    },
+    // buttonStates: function() {
+    //   if (this.hops.length === 0) return [];
+    //   let items = [];
+    //
+    //   for (let hop of this.hops) {
+    //     console.debug("hop", hop);
+    //     items.push(this.stepIsDisabled(hop.add));
+    //   }
+    //
+    //   return items;
+    // },
     computedHops() {
       // Add in custom tracking of processing each item
       let hops = this.hops;
 
       for (let hop of hops) {
-        hop["disabled"] = this.stepIsDisabled(hop.add);
+        // hop["disabled"] = this.stepIsDisabled(hop.add);
+        this.$set(hop, "disabled", this.stepIsDisabled(hop));
       }
 
       return hops;
@@ -89,42 +90,88 @@ export default {
   data() {
     return {
       hops: this.initHops,
-      disabledHops: [],
-      // buttonStates: [],
     }
   },
   methods: {
-    stepIsDisabled: function(step) {
-      if (step === "start") {
-        console.debug("stepIsDisabled [start]", step, false);
+    stepIsDisabled: function(hop) {
+
+      if (!Object.hasOwn(hop, "add")) {
+        console.error("stepIsDisabled called with hop that has no property 'add'", hop);
+        throw new Error("stepIsDisabled called with hop that has no property 'add'");
+      }
+
+      // Make sure the hop add step is of expected type, else error out.
+      if (["start", "middle", "end"].includes(hop.add) === false) {
+        let msg = `Unhandled hop with unexpected add '${hop.add}'`;
+        console.error(msg, hop);
+        throw new Error(msg);
+      }
+
+      // let hopDesc = "";
+      // if (Object.hasOwn(hop, "add")) hopDesc += `[${hop.add}] `;
+      // if (Object.hasOwn(hop, "amount")) hopDesc += `${hop.amount.value} `;
+      // if (Object.hasOwn(hop, "amount")) hopDesc += `${hop.amount.unit} `;
+      // if (Object.hasOwn(hop, "name")) hopDesc += `${hop.name} `;
+      // if (Object.hasOwn(hop, "state")) hopDesc += `${hop.state} `;
+
+      // console.info("hop", hopDesc);
+
+      if (!Object.hasOwn(hop, "add")) {
+        console.error("stepIsDisabled called with hop that has no property 'add'", hop);
+        throw new Error("stepIsDisabled called with hop that has no property 'add'");
+      }
+
+      // If done, then disable regardless add step.
+      if (hop.state === "DONE") {
+        // console.debug("stepIsDisabled [state:DONE]", hop.add, true);
+        return true;
+      } else if (hop.add === "start") {
+        // If add step is start then enable.
+        // console.debug("stepIsDisabled [add:start]", hop.add, false);
         return false;
       }
 
-      for (let hop of this.hops) {
-        if (step === "middle" || step === "end") {
-          // If there exists a start hop that is not done, then this step is disabled.
-          console.debug(hop.add, hop.state ,hop.state !== "DONE");
-          if (hop.add === "start" && hop.state !== "DONE") {
-            console.debug("stepIsDisabled", step, true);
-            return true;
-          }
-        } else if (step === "end") {
-          // If there exists a middle hop that is not done, then this step is disabled.
-          if (hop.add === "middle" && hop.state !== "DONE") {
-            console.debug("stepIsDisabled", step, true);
-            return true;
-          }
+      // Handle hop add steps past start:
+
+      // Check current hops
+      let pendingStarts = 0;
+      let pendingMiddles = 0;
+
+      for (let i = 0; i < this.hops.length; i++) {
+        if (this.hops[i].add === "start" && this.hops[i].state !== "DONE") {
+          // console.info("undone:start", this.hops[i]);
+          pendingStarts++;
         }
+        if (this.hops[i].add === "middle" && this.hops[i].state !== "DONE") {
+          // console.info("undone:middle", this.hops[i]);
+          pendingMiddles++;
+        }
+        // console.log("sss")
       }
+        if (hop.add === "middle" && pendingStarts > 0) {
+          // console.debug("stepIsDisabled [add:middle], reason pendingStarts > 0", hop.add, pendingStarts, true);
+          return true;
+        }
+        if (hop.add === "end" && (pendingStarts > 0 || pendingMiddles > 0) ) {
+          // console.debug("stepIsDisabled [add:end]", hop.add, true);
+          // console.debug("stepIsDisabled [add:end], reason pendingStarts || pendingMiddles > 0", hop.add, pendingStarts, pendingMiddles, true);
+          return true;
+        }
 
       // If no prerequisite hops that were not done was found, then this step is enabled.
-      console.debug("stepIsDisabled", step, false);
+      console.debug("stepIsDisabled ENABLED", hop.add, hop, false);
       return false;
     },
     updateButtonStates: function() {
       if (this.hops) {
+        // let states = [];
         for (let i = 0; i < this.hops.length; i++) {
-          this.buttonStates[i] = this.stepIsDisabled(this.hops[i].add);
+          console.info("updateButtonState", i, this.hops[i]);
+          // this.buttonStates[i] = this.stepIsDisabled(this.hops[i].add);
+          // let x = this.stepIsDisabled(this.hops[i]);
+          // console.info("this.hops[i].disabled --> x", this.hops[i].disabled, x);
+          this.$set(this.hops[i], "disabled", this.stepIsDisabled(this.hops[i]));
+          // states[i] = this.stepIsDisabled(this.hops[i].add);
         }
       }
     },
@@ -142,15 +189,17 @@ export default {
     //       if (hop.add === "start")
     //     }
     // },
-    entryStateChanged: function (event, index) {
-      console.log("thing", event, index);
-      this.updateButtonStates();
+    entryStateChanged: function (index) {
+      console.log("entryStateChanged", index);
+      // this.updateButtonStates();
+      // this.$forceUpdate();
       // this.computedHops[index].disabled = true;
     }
   },
   watch: {
     state: {
       handler() {
+        console.info("update:state")
         this.$emit('update:state', this.state);
       },
       immediate: true
@@ -163,16 +212,22 @@ export default {
         // }
       },
       immediate: true
+    },
+    hops: {
+      handler(newVal, oldVal) {
+        console.log("hops property changed", oldVal, newVal);
+        this.updateButtonStates();
+      },
+      deep: true,
+      immediate: true
     }
-    // hops: {
-    //   handler() {
-    //
-    //   }
-    // }
   },
   created: function () {
       this.processHops();
       // this.updateButtonStates();
+  },
+  mounted() {
+    // this.updateButtonStates();
   }
 }
 </script>

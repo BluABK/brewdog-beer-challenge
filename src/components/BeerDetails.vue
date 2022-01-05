@@ -131,16 +131,22 @@ export default {
       return this.missingImageUrl;
     },
     beerIngredientsHops() {
-      if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "ingredients")) {
-        if (this.selectedBeer.ingredients != null && Object.hasOwn(this.selectedBeer.ingredients, "hops")) {
-          // Add in custom tracking of processing each item
-          let hops = this.selectedBeer.ingredients.hops;
+      if (this.selectedBeer != null) {
+        if (Object.hasOwn(this.selectedBeer, "ingredients")) {
+          if (this.selectedBeer.ingredients != null && Object.hasOwn(this.selectedBeer.ingredients, "hops")) {
+            // Add in custom tracking of processing each item
+            // let hops = this.selectedBeer.ingredients.hops;
 
-          for (let hop of this.selectedBeer.ingredients.hops) {
-            hop["state"] = "IDLE";
+            for (let i = 0; i < this.selectedBeer.ingredients.hops.length; i++) {
+              // hop["state"] = "IDLE";
+              this.$set(this.selectedBeer.ingredients.hops[i], "state", "IDLE");
+              // hop["disabled"] = null;
+              this.$set(this.selectedBeer.ingredients.hops[i], "disabled", null);
+            }
+
+            return this.selectedBeer.ingredients.hops;
           }
 
-          return hops;
         }
       }
 
@@ -150,13 +156,13 @@ export default {
       if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "ingredients")) {
         if (this.selectedBeer.ingredients != null && Object.hasOwn(this.selectedBeer.ingredients, "malt")) {
           // Add in custom tracking of processing each item
-          let malts = this.selectedBeer.ingredients.malt;
+          // let malts = this.selectedBeer.ingredients.malt;
 
-          for (let malt of malts) {
-            malt["state"] = "IDLE";
+          for (let i = 0; i < this.selectedBeer.ingredients.malt.length; i++) {
+            this.$set(this.selectedBeer.ingredients.malt[i], "state", "IDLE");
           }
 
-          return malts;
+          return this.selectedBeer.ingredients.malt;
         }
       }
 
