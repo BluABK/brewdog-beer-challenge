@@ -97,14 +97,23 @@ export default {
         this.$emit('update:state', this.state);
       },
       immediate: true
+    },
+    disabled: {
+      handler() {
+        this.$emit('update:disabled', this.disabled);
+      },
+      immediate: true
     }
   },
   methods: {
-    clickedButton: function () {
-      if (this.disabled) return;
-
+    setDone: function() {
       this.state = "DONE";
       this.disabled = true;
+      this.$emit('done')
+    },
+    clickedButton: function () {
+      if (this.disabled) return;
+      this.setDone();
     }
   }
 }

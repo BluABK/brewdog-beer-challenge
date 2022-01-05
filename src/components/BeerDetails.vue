@@ -136,7 +136,7 @@ export default {
           // Add in custom tracking of processing each item
           let hops = this.selectedBeer.ingredients.hops;
 
-          for (let hop of hops) {
+          for (let hop of this.selectedBeer.ingredients.hops) {
             hop["state"] = "IDLE";
           }
 
