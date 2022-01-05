@@ -22,3 +22,10 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+# FIXME: Add to readme properly
+
+## Design decisions
+* BeerList sends a copy of an API beer entry to BeerDetails (brewery) so that you can brew the same kind multiple times
+  without having to query the API for a new set every time. 

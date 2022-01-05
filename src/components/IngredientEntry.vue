@@ -25,6 +25,10 @@ export default {
       default: false,
       type: Boolean
     },
+    isDisabled: {
+      default: null,
+      type: Boolean
+    },
     amount: {
       default: null,
       type: Number
@@ -83,12 +87,19 @@ export default {
       if (s.length > 0) s += '.';
 
       return s;
+    },
+    disabled: function() {
+      if (this.isDisabled) {
+        return this.isDisabled;
+      }
+
+      return this.initDisabled;
     }
   },
   data() {
     return {
       state: this.initState,
-      disabled: this.initDisabled
+      // disabled: this.initDisabled
     }
   },
   watch: {
