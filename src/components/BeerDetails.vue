@@ -1,7 +1,7 @@
 <template>
   <div class="beer-details-screen" v-show="isVisible">
     <div class="beer-details-screen-content">
-      <button @click="showBeerList">Back to list</button>
+      <button @click="returnToBeerList">Back to list</button>
       <h1>{{ msg }}</h1>
 
       <div class="beer-item" >
@@ -92,7 +92,7 @@ export default {
   props: {
     // beerDetailsVisible: Boolean,
     msg: String,
-    selectedBeer: {
+    initBeer: {
       default: null,
       type: Object
     },
@@ -207,35 +207,42 @@ export default {
   },
   data() {
     return {
-      // isVisible: false
+      selectedBeer: this.initBeer
     }
   },
   methods: {
-    // Utils
-    uuid: function() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
+    /**
+     * Emits the updated beer object to parent.
+     */
+    updateSelectedBeer: function () {
+      this.$emit('update:beer', this.selectedBeer);
     },
-    // Own
-    showBeerList: function(beer) {
+    reset: function () {
+      this.selectedBeer = null;
+    },
+    showBeerList: function () {
       this.$emit('showBeerList');
-
-      // Emit the updated beer object to parent upon exiting current screen.
-      // this.$emit('selectBeer', this.selectedBeer);
-      this.$emit('selectBeer', null);
-
-      console.info("Show beer list", beer);
     },
-    // /**
-    //  * Emits the updated beer object to parent.
-    //  */
-    // updateBeer: function() {
-    //   this.$emit('updateBeer');
-    // },
+    returnToBeerList: function () {
+      this.updateSelectedBeer();
+      // this.$emit('selectedBeer', this.selectedBeer);
+      // this.reset();
+      this.showBeerList();
+    },
+  },
+  watch: {
+    initBeer: {
+      handler() {
+        // If initBeer changes, select that one instead.
+        this.selectedBeer = this.initBeer;
+        this.updateSelectedBeer();
+      },
+      immediate: true
+
+    }
   }
 }
+
 </script>
 
 <style scoped>

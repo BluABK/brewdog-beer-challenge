@@ -1,7 +1,16 @@
 <template>
   <div id="app">
-    <BeerDetails msg="Beer Details" :isVisible="showBeerDetailsComponent" :selectedBeer="selectedBeer" @showBeerList="showBeerList"/>
-    <BeerList msg="Beers" :isVisible="showBeerListComponent" :selectedBeer="selectedBeer" @selectBeer="selectBeer"/>
+    <BeerDetails
+        msg="Beer Details"
+        :isVisible="showBeerDetailsComponent"
+        :initBeer="selectedBeer"
+        :selectedBeer.sync="selectedBeer"
+        @showBeerList="showBeerList"/>
+    <BeerList
+        msg="Beers"
+        :isVisible="showBeerListComponent"
+        :selectedBeer="selectedBeer"
+        @selectBeer="selectBeer"/>
   </div>
 </template>
 
@@ -11,17 +20,12 @@ import BeerDetails from "@/components/BeerDetails";
 
 export default {
   name: 'App',
-  props: {
-    // selectedBeer: {
-    //   default: null,
-    //   type: Object
-    // }
-  },
   data () {
     return {
       showBeerDetailsComponent: false,
       showBeerListComponent: true,
-      selectedBeer: null
+      selectedBeer: null,
+      beers: []
     }
   },
   components: {
@@ -32,9 +36,15 @@ export default {
     selectBeer: function (beer) {
       console.info("Show details for beer", beer);
       this.selectedBeer = beer;
+      // Reset
       this.showBeerDetails();
     },
+    stashBeer: function() {
+      this.beers.push(this.selectedBeer);
+      this.selectedBeer = null;
+    },
     showBeerList: function () {
+      this.stashBeer();
       this.showBeerDetailsComponent = false;
       this.showBeerListComponent = true;
     },
