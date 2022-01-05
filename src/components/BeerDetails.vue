@@ -26,14 +26,7 @@
               </div>
               <div class="malts ingredients-element" v-if="beerIngredientsMalts.length > 0">
                 <div class="malts-heading ingredients-heading">Malts</div>
-                  <div class="malts-content" v-for="(malt, i) in beerIngredientsMalts" v-bind:key="'malt' + i + malt.name">
-                    <IngredientEntry
-                        :initState="beerIngredientsMalts[i].state"
-                        :amount="beerIngredientsMalts[i].amount.value"
-                        :unit="beerIngredientsMalts[i].amount.unit"
-                        :name="beerIngredientsMalts[i].name"
-                        v-bind:state.sync="beerIngredientsMalts[i].state" />
-                  </div>
+                <MaltsList :initMalts="beerIngredientsMalts"/>
               </div>
               <div class="methods ingredients-element">
                 <div class="methods-heading ingredients-heading">Methods</div>
@@ -86,11 +79,11 @@
 import Countdown from "@/components/Countdown";
 import IngredientEntry from "@/components/IngredientEntry";
 import HopsList from "@/components/HopsList";
+import MaltsList from "@/components/MaltsList";
 export default {
   name: "BeerDetails",
-  components: {HopsList, Countdown, IngredientEntry},
+  components: {HopsList, MaltsList, Countdown, IngredientEntry},
   props: {
-    // beerDetailsVisible: Boolean,
     msg: String,
     initBeer: {
       default: null,
