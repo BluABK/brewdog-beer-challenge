@@ -13,20 +13,13 @@
     <ul class="beer-list">
       <li v-for="beer in beers" v-bind:key="beer.id">
         <div class="beer-item" @click="showBeerDetails(beer)">
-          <img class="beer-image" alt="Beer image" v-bind:src="beer.image_url">
-          <div class="beer-item-content">
-            <div class="beer-item-name">
-              {{beer.name}}
-            </div>
-            <div class="beer-item-spacer"></div>
-            <div class="beer-item-tagline">
-              {{beer.tagline}}
-            </div>
-            <div class="beer-item-spacer"></div>
-            <div class="beer-item-abv">ABV: {{beer.abv}}</div>
-            <div class="beer-item-spacer"></div>
-            <div class="beer-item-description"><p>{{beer.description}}</p></div>
-          </div>
+          <BeerInfo
+              :name="beer.name"
+              :tagLine="beer.tagline"
+              :abv="beer.abv"
+              :description="beer.description"
+              :initImageUrl="beer.image_url"
+              :imageSizeHeightPx="100" />
         </div>
       </li>
     </ul>
@@ -36,9 +29,11 @@
 
 <script>
 import axios from "axios";
+import BeerInfo from "@/components/BeerInfo";
 
 export default {
   name: 'BeerList',
+  components: {BeerInfo},
   props: {
     // beerListVisible: Boolean,
     msg: String,
@@ -84,10 +79,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-:root {
-  --beer-list-bgcolor: #bfbfbf;
-}
-
 h3 {
   margin: 40px 0 0;
 }
@@ -108,10 +99,6 @@ a {
   display: inline-block;
 }
 
-.beer-item img {
-  height: 100px;
-}
-
 .beer-item {
   padding: 10px;
   border: 1px solid grey;
@@ -129,26 +116,7 @@ a {
   text-align: left;
 }
 
-.beer-item-spacer {
-  height: 10px;
-}
-
 .element-spacer {
   height: 10px;
 }
-
-.beer-item-name {
-  font-weight: bolder;
-  font-size: 130%;
-}
-
-.beer-item-tagline {
-  font-weight: bold;
-  font-size: 85%;
-}
-
-.beer-item-abv {
-  font-weight: bold;
-}
-
 </style>

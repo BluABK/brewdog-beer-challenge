@@ -5,19 +5,8 @@
       <h1>{{ msg }}</h1>
 
       <div class="beer-item" >
-        <img class="beer-image" alt="Beer image" v-bind:src="beerImageUrl">
         <div class="beer-item-content">
-          <div class="beer-item-name">
-            {{beerName}}
-          </div>
-          <div class="beer-item-spacer"></div>
-          <div class="beer-item-tagline">
-            {{beerTagline}}
-          </div>
-          <div class="beer-item-spacer"></div>
-          <div class="beer-item-abv">ABV: {{beerAbv}}</div>
-          <div class="beer-item-spacer"></div>
-          <div class="beer-item-description"><p>{{beerDescription}}</p></div>
+          <BeerInfo :name="beerName" :tagLine="beerTagline" :abv="beerAbv" :description="beerDescription" :initImageUrl="beerImageUrl" />
           <div class="ingredients">
             <div class="ingredients-content">
               <div class="hops ingredients-element" v-if="beerIngredientsHops.length > 0">
@@ -47,18 +36,15 @@
 import HopsList from "@/components/HopsList";
 import MaltsList from "@/components/MaltsList";
 import MethodsList from "@/components/MethodsList";
+import BeerInfo from "@/components/BeerInfo";
 export default {
   name: "BeerDetails",
-  components: {MethodsList, HopsList, MaltsList},
+  components: {BeerInfo, MethodsList, HopsList, MaltsList},
   props: {
     msg: String,
     initBeer: {
       default: null,
       type: Object
-    },
-    missingImageUrl: {
-      default: "../assets/beer404.png",
-      type: String
     }
   },
   computed: {
@@ -66,29 +52,49 @@ export default {
       return this.$attrs.isVisible;
     },
     beerName() {
-      if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "name")) return this.selectedBeer.name;
+      if (this.selectedBeer != null) {
+        if (Object.hasOwn(this.selectedBeer, "name")) {
+          return this.selectedBeer.name
+        }
+      }
 
-      return "Beer name N/A";
+      return null;
     },
     beerDescription() {
-      if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "description")) return this.selectedBeer.description;
+      if (this.selectedBeer != null) {
+        if (Object.hasOwn(this.selectedBeer, "description")) {
+          return this.selectedBeer.description
+        }
+      }
 
-      return "Beer description N/A";
+      return null;
     },
     beerTagline() {
-      if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "tagline")) return this.selectedBeer.tagline;
+      if (this.selectedBeer != null) {
+        if (Object.hasOwn(this.selectedBeer, "tagline")) {
+          return this.selectedBeer.tagline
+        }
+      }
 
-      return "Beer tagline N/A";
+      return null;
     },
     beerAbv() {
-      if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "abv")) return this.selectedBeer.abv;
+      if (this.selectedBeer != null) {
+        if (Object.hasOwn(this.selectedBeer, "abv")) {
+          return this.selectedBeer.abv
+        }
+      }
 
-      return "N/A";
+      return null;
     },
     beerImageUrl() {
-      if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "image_url")) return this.selectedBeer.image_url;
+      if (this.selectedBeer != null) {
+        if (Object.hasOwn(this.selectedBeer, "image_url")) {
+          return this.selectedBeer.image_url
+        }
+      }
 
-      return this.missingImageUrl;
+      return null;
     },
     beerIngredientsHops() {
       if (this.selectedBeer != null) {
@@ -230,16 +236,6 @@ export default {
 .beer-details-screen-content {
   margin: auto;
   width:80vw;
-}
-
-.beer-item {
-}
-
-.beer-item-content {
-}
-
-.beer-item img {
-  height: 200px;
 }
 
 .hops {
