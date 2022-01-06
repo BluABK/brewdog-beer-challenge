@@ -118,7 +118,7 @@ export default {
         spacing = " ";
       }
       // Always show seconds.
-      s += `${spacing}${this.seconds} second${this.minutes > 1 ? 's' : ''}.`;
+      s += `${spacing}${this.seconds} second${this.seconds > 1 ? 's' : ''}.`;
 
       return s;
     },
@@ -209,7 +209,7 @@ export default {
         }
       }
     }
-  }
+  },
 }
 </script>
 
