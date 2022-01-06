@@ -57,7 +57,7 @@ export default {
       type: Object
     },
     missingImageUrl: {
-      default: "../assets/logo.png",
+      default: "../assets/beer404.png",
       type: String
     }
   },
@@ -204,8 +204,6 @@ export default {
     },
     returnToBeerList: function () {
       this.updateSelectedBeer();
-      // this.$emit('selectedBeer', this.selectedBeer);
-      // this.reset();
       this.showBeerList();
     },
   },
@@ -225,11 +223,6 @@ export default {
 </script>
 
 <style scoped>
-
-ul {
-  /*float:left;*/
-}
-
 .beer-details-screen {
   text-align:center;
 }
@@ -250,51 +243,29 @@ ul {
 }
 
 .hops {
-  /*background-color: mediumpurple;*/
   float: left;
   width: 33.3%;
-  /*border-left: 1px solid black;*/
 }
 
 .malts {
-  /*background-color: coral;*/
   float: left;
   width: 33.3%;
-  /*border-left: 1px solid black;*/
 }
 
 .methods {
-  /*background-color: cornflowerblue;*/
   float: left;
   width: 33.3%;
-  /*border-left: 1px solid black;*/
-  /*border-right: 1px solid black;*/
-}
-
-.ingredients-element {
-  /*padding: 0 10px 0 10px;*/
-}
-
-.hops-content {
-  /*font-weight: bold;*/
 }
 
 .ingredients {
-  /*margin: auto;*/
   text-align:center;
-  /*height:300px;*/
-  /*width:80vw;*/
-  /*overflow: scroll;*/
 
 }
 
 .ingredients-content {
-  /*height:100%;*/
-  /*height: 50vh;*/
   width:100%;
   margin: auto;
   text-align: left;
-  /*background-color: #b7b7b7;*/
   background-color: mediumpurple;
 }
 
