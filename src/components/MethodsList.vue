@@ -1,26 +1,31 @@
 <template>
   <div class="methods-container">
-    <div class="methods-subheading" v-if="this.mashTemps.length > 0">
+    <div class="methods-subheading" v-if="mashTemps.length > 0">
       <h1>Mash temperatures</h1>
-      <MethodMashTempList :initMashTemps="this.mashTemps"/>
+      <MethodMashTempList :initMashTemps="mashTemps"/>
     </div>
 
-    <div class="methods-fermentation methods-subheading" v-if="this.fermentation">
+    <div class="methods-fermentation methods-subheading" v-if="fermentation">
       <h1 class="">Fermentation</h1>
-      <IngredientEntry
-          :initState="this.fermentation.state"
-          :amount="this.fermentation.temp.value"
-          :unit="this.fermentation.temp.unit"
-          v-bind:state.sync="this.fermentation.state"
+      <FermentationEntry
+          :initState="fermentation.state"
+          :initDisabled="stepIsDisabled(fermentation)"
+          :amount="fermentation.temp.value"
+          :unit="fermentation.temp.unit"
+          :state.sync="fermentation.state"
+          :disabled.sync="fermentation.disabled"
       />
     </div>
 
-    <div class="methods-twist methods-subheading" v-if="this.twist">
+    <div class="methods-twist methods-subheading" v-if="twist">
       <h1>Twist</h1>
       <IngredientEntry
-          :initState="this.twist.state"
-          :twistDescription="this.twist.description"
-          v-bind:state.sync="this.twist.state" />
+          :initState="twist.state"
+          :initDisabled="stepIsDisabled(twist)"
+          :twistDescription="twist.description"
+          :state.sync="twist.state"
+          :disabled.sync="twist.disabled"
+      />
     </div>
   </div>
 
@@ -28,10 +33,11 @@
 
 <script>
 import IngredientEntry from "@/components/IngredientEntry";
+import FermentationEntry from "@/components/FermentationEntry";
 import MethodMashTempList from "@/components/MethodMashTempList";
 export default {
   name: "MethodsList",
-  components: {IngredientEntry, MethodMashTempList},
+  components: {IngredientEntry, FermentationEntry, MethodMashTempList},
   props: {
     initMashTemps: {
       default: () => [],
@@ -56,6 +62,10 @@ export default {
     }
   },
   methods: {
+    stepIsDisabled: function(entry) {
+      // If done, then disable.
+      return entry.state === "DONE";
+    }
   },
   watch: {
   }
