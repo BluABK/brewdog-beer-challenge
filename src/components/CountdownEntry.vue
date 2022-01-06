@@ -113,6 +113,10 @@ export default {
         s+= `${spacing}${this.days} day${this.days > 1 ? 's' : ''},`;
         spacing = " ";
       }
+      if (this.hours > 0) {
+        s+= `${spacing}${this.hours} hour${this.hours > 1 ? 's' : ''},`;
+        spacing = " ";
+      }
       if (this.minutes > 0) {
         s+= `${spacing}${this.minutes} minute${this.minutes > 1 ? 's' : ''},`;
         spacing = " ";
