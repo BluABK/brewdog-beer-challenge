@@ -3,11 +3,18 @@
     <button class="action-button" @click="clickedButton()" :disabled="disabled">
       {{state}}
     </button>
-    {{description}} <span v-if="this.state !== 'IDLE' && this.timeRemaining > 0">[Remaining: {{timeRemaining}} seconds]</span>
+    {{description}}
+    <span v-if="this.state !== 'IDLE' && this.timeRemaining > 0">[{{timeRemainingString}}]</span>
   </div>
 </template>
 
 <script>
+
+const SECONDS_MINUTE = 60;
+const SECONDS_HOUR = 60 * SECONDS_MINUTE;
+const SECONDS_DAY = 24 * SECONDS_HOUR;
+const SECONDS_WEEK = 7 * SECONDS_DAY;
+
 export default {
   name: "CountdownEntry",
   props: {
@@ -55,6 +62,52 @@ export default {
       }
 
       return this.initDisabled;
+    },
+    /**
+     * Remaining days.
+     * @returns {number} The computed value.
+     */
+    weeks: function() {
+      return Math.floor(this.timeRemaining / SECONDS_WEEK);
+    },
+    /**
+     * Remaining days.
+     * @returns {number} The computed value.
+     */
+    days: function() {
+      return Math.floor(this.timeRemaining / SECONDS_DAY);
+    },
+
+    /**
+     * Remaining hours.
+     * @returns {number} The computed value.
+     */
+    hours: function() {
+      return Math.floor((this.timeRemaining % SECONDS_DAY) / SECONDS_HOUR);
+    },
+
+    /**
+     * Remaining minutes.
+     * @returns {number} The computed value.
+     */
+    minutes: function() {
+      return Math.floor((this.timeRemaining % SECONDS_HOUR) / SECONDS_MINUTE);
+    },
+
+    /**
+     * Remaining seconds.
+     * @returns {number} The computed value.
+     */
+    seconds: function() {
+      return Math.floor(this.timeRemaining % SECONDS_MINUTE);
+    },
+    timeRemainingString: function () {
+      let s = "";
+
+      s = `Time Remaining：${this.days} days, ${this.hours} hours, ${this.minutes} minutes, ${this.seconds} seconds.`;
+
+      return s;
+
     },
     /**
      * Builds a description string based on provided properties.
