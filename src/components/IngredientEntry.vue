@@ -61,10 +61,6 @@ export default {
       let s = "";
       let spacing = "";
 
-      if (this.step) {
-        s+= `${spacing}[${this.step}]`;
-        spacing = " ";
-      }
       if (this.amount) {
         s+= `${spacing}${this.amount}`;
         spacing = " ";
