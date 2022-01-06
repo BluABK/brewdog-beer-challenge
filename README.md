@@ -47,4 +47,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
   without having to query the API for a new set every time.
 
 ### Assumptions
-* hop ordering implementation states only states that `add=end` can't be DONE until all the hops with `add=middle` are done, but I also made it depend on all the hops with `add=start` as that seemed more logical, however this can be swiftly changed by the removal of 21 chars in a single if statement.
+* hop ordering implementation requirement only states that `add=end` can't be DONE until all the hops with `add=middle` are done, but I also made it depend on all the hops with `add=start` as that seemed more logical, however this can be swiftly changed by the removal of 21 chars in a single if statement.
