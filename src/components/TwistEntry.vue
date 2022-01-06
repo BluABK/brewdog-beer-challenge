@@ -2,8 +2,7 @@
   <StateEntry
       :initState="initState"
       :initDisabled="initDisabled"
-      :amount="amount"
-      :unit="unit"
+      :twistDescription="description"
       :state.sync="state"
       :disabled.sync="disabled"
   />
@@ -13,7 +12,7 @@
 import StateEntry from "@/components/StateEntry";
 
 export default {
-  name: "FermentationEntry",
+  name: "TwistEntry",
   components: {StateEntry},
   props: {
     initState: {
@@ -24,14 +23,10 @@ export default {
       default: false,
       type: Boolean
     },
-    amount: {
-      default: null,
-      type: Number
-    },
-    unit: {
+    description: {
       default: null,
       type: String
-    },
+    }
   },
   computed: {
     disabled: function() {

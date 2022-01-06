@@ -19,10 +19,10 @@
 
     <div class="methods-twist methods-subheading" v-if="twist">
       <h1>Twist</h1>
-      <StateEntry
+      <TwistEntry
           :initState="twist.state"
           :initDisabled="stepIsDisabled(twist)"
-          :twistDescription="twist.description"
+          :description="twist.description"
           :state.sync="twist.state"
           :disabled.sync="twist.disabled"
       />
@@ -32,12 +32,12 @@
 </template>
 
 <script>
-import StateEntry from "@/components/StateEntry";
+import TwistEntry from "@/components/TwistEntry";
 import FermentationEntry from "@/components/FermentationEntry";
 import MethodMashTempList from "@/components/MethodMashTempList";
 export default {
   name: "MethodsList",
-  components: {StateEntry, FermentationEntry, MethodMashTempList},
+  components: {FermentationEntry, TwistEntry, MethodMashTempList},
   props: {
     initMashTemps: {
       default: () => [],
