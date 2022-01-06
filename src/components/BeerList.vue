@@ -1,6 +1,6 @@
 <template>
   <div class="beer-list-screen" v-show="isVisible">
-    <h1>{{ msg }}</h1>
+    <h1>{{ pageTitle }}</h1>
 
     <div class="element-spacer"></div>
 
@@ -35,12 +35,8 @@ export default {
   name: 'BeerList',
   components: {BeerInfo},
   props: {
-    // beerListVisible: Boolean,
-    msg: String,
-    selectedBeer: {
-      default: null,
-      type: Object
-    }
+    pageTitle: String,
+    selectedBeer: Object
   },
   computed: {
     isVisible() {
