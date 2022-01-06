@@ -73,8 +73,9 @@ export default {
      * @param beer Beer object.
      */
     showBeerDetails: function(beer) {
-      this.$emit('selectBeer', beer);
-      console.info("Show details for beer", beer);
+      let clonedBeer = JSON.parse(JSON.stringify(beer));
+      // Emit a copy of the beer to avoid modifying the original "template".
+      this.$emit('selectBeer', clonedBeer);
     }
   }
 }
