@@ -45,7 +45,7 @@ export default {
       default: null,
       type: String
     },
-    twist: {
+    twistDescription: {
       default: null,
       type: String
     }
@@ -56,6 +56,8 @@ export default {
      * @returns {string}
      */
     description() {
+      if (this.twistDescription) return `${this.twistDescription}.`;
+
       let s = "";
       let spacing = "";
 
@@ -77,10 +79,6 @@ export default {
       }
       if (this.attribute) {
         s+= `${spacing}(${this.attribute})`;
-        spacing = " ";
-      }
-      if (this.twist) {
-        s+= `${spacing}${this.twist}`;
         spacing = " ";
       }
 

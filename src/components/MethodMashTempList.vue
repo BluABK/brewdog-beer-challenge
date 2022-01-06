@@ -32,7 +32,7 @@ export default {
   components: {IngredientEntry, Countdown},
   props: {
     initMashTemps: {
-      default: null,
+      default: () => [],
       type: Array
     }
   },

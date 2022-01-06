@@ -36,7 +36,6 @@ export default {
     selectBeer: function (beer) {
       console.info("Show details for beer", beer);
       this.selectedBeer = beer;
-      // Reset
       this.showBeerDetails();
     },
     stashBeer: function() {

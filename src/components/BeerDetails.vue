@@ -28,31 +28,12 @@
                 <div class="malts-heading ingredients-heading">Malts</div>
                 <MaltsList :initMalts="beerIngredientsMalts"/>
               </div>
-              <div class="methods ingredients-element">
+              <div class="methods ingredients-element" v-if="beerMethods">
                 <div class="methods-heading ingredients-heading">Methods</div>
-
-                  <div class="methods-subheading" v-if="beerMethods.mash_temp.length > 0">
-                    <h1>Mash temperatures</h1>
-                    <MethodMashTempList :initMashTemps="beerMethods.mash_temp"/>
-                  </div>
-
-                  <div class="methods-fermentation methods-subheading" v-if="beerMethods.fermentation">
-                    <h1 class="">Fermentation</h1>
-                    <IngredientEntry
-                                     :initState="beerMethods.fermentation.state"
-                                     :amount="beerMethods.fermentation.temp.value"
-                                     :unit="beerMethods.fermentation.temp.unit"
-                                     v-bind:state.sync="beerMethods.fermentation.state"
-                    />
-                  </div>
-
-                  <div class="methods-twist methods-subheading" v-if="beerMethods.twist">
-                    <h1>Twist</h1>
-                    <IngredientEntry
-                        :initState="beerMethods.twist_state"
-                        :twist="beerMethods.twist"
-                        v-bind:state.sync="beerMethods.twist_state" />
-                  </div>
+                <MethodsList
+                    :initMashTemps="beerMethods.mash_temp"
+                    :initFermentation="beerMethods.fermentation"
+                    :initTwist="beerMethods.twist"/>
               </div> <!-- beer-item-methods //-->
             </div> <!-- ingredients-content //-->
           </div> <!-- ingredients //-->
@@ -63,13 +44,12 @@
 </template>
 
 <script>
-import IngredientEntry from "@/components/IngredientEntry";
 import HopsList from "@/components/HopsList";
 import MaltsList from "@/components/MaltsList";
-import MethodMashTempList from "@/components/MethodMashTempList";
+import MethodsList from "@/components/MethodsList";
 export default {
   name: "BeerDetails",
-  components: {MethodMashTempList, HopsList, MaltsList, IngredientEntry},
+  components: {MethodsList, HopsList, MaltsList},
   props: {
     msg: String,
     initBeer: {
@@ -146,10 +126,11 @@ export default {
     beerMethods() {
       let mashTemps = [];
       let fermentation = null;
-      let twist = null;
-      let twistState = null;
+      let twistObj = null;
+      let hasNoMethods = true;
 
       if (this.selectedBeer != null && Object.hasOwn(this.selectedBeer, "method")) {
+        hasNoMethods = false;
         if (Object.hasOwn(this.selectedBeer.method, "mash_temp")) {
           mashTemps = this.selectedBeer.method.mash_temp;
 
@@ -168,6 +149,7 @@ export default {
         }
 
         if (Object.hasOwn(this.selectedBeer.method, "fermentation")) {
+          hasNoMethods = false;
           fermentation = this.selectedBeer.method.fermentation;
 
           // Add in custom tracking of processing the fermentation
@@ -176,23 +158,29 @@ export default {
         }
 
         if (Object.hasOwn(this.selectedBeer.method, "twist")) {
-          twist = this.selectedBeer.method.twist;
+          hasNoMethods = false;
+          let twistDescription = this.selectedBeer.method.twist;
 
           if (this.selectedBeer.method.twist != null) {
-            twistState = "IDLE";
+            // Replace twist string with an object for better consistency with rest of methods.
+            twistObj = {};
+            this.$set(this.selectedBeer.method, "twist", twistObj);
+            this.$set(this.selectedBeer.method.twist, "description", twistDescription);
 
             // Add in custom tracking of processing the twist
-            this.$set(this.selectedBeer.method, "twist_state", twistState);
-            this.$set(this.selectedBeer.method, "twist_disabled", null);
+            this.$set(this.selectedBeer.method.twist, "state", "IDLE");
+            this.$set(this.selectedBeer.method.twist, "disabled", null);
           }
         }
       }
 
+      // If there are no methods, return null instead of an object with nulls.
+      if (hasNoMethods === true) return null;
+
       return {
         mash_temp: mashTemps,
         fermentation: fermentation,
-        twist: twist,
-        twist_state: twistState
+        twist: twistObj,
       };
     }
   },
@@ -314,10 +302,6 @@ ul {
   text-align: center;
   font-weight: bold;
   font-size: 125%;
-}
-
-.methods-subheading {
-  padding-bottom: 5px;
 }
 
 .methods-subheading h1 {
