@@ -1,7 +1,7 @@
 <template>
   <div class="method-mashtemps-container">
     <div class="mashtemp-content" v-for="(mashTemp, i) in this.computedMashTemps" v-bind:key="'mashTemp' + i + mashTemp.temp.value">
-      <Countdown v-if="mashTemp.duration"
+      <CountdownEntry v-if="mashTemp.duration"
                  :initState="mashTemp.state"
                  :initDisabled="stepIsDisabled(mashTemp)"
                  :initTime="mashTemp.time_remaining"
@@ -26,10 +26,10 @@
 
 <script>
 import IngredientEntry from "@/components/IngredientEntry";
-import Countdown from "@/components/Countdown";
+import CountdownEntry from "@/components/CountdownEntry";
 export default {
   name: "MethodMashTempList",
-  components: {IngredientEntry, Countdown},
+  components: {IngredientEntry, CountdownEntry},
   props: {
     initMashTemps: {
       default: () => [],

@@ -1,5 +1,5 @@
 <template>
-  <div class="countdown-element">
+  <div class="countdown-entry">
     <button class="action-button" @click="clickedButton()" :disabled="disabled">
       {{state}}
     </button>
@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "Countdown",
+  name: "CountdownEntry",
   props: {
     initTime: {
       default: null,
