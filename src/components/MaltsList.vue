@@ -1,7 +1,7 @@
 <template>
   <div class="malts-container">
     <div class="malts-content" v-for="(malt, i) in this.computedMalts" :key="'malt' + i + malt.name">
-      <IngredientEntry
+      <StateEntry
           :initState="malt.state"
           :initDisabled="stepIsDisabled(malt)"
           :amount="malt.amount.value"
@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import IngredientEntry from "@/components/IngredientEntry";
+import StateEntry from "@/components/StateEntry";
 export default {
   name: "MaltsList",
-  components: {IngredientEntry},
+  components: {StateEntry},
   props: {
     initMalts: {
       default: null,

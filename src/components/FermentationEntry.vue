@@ -1,5 +1,5 @@
 <template>
-  <IngredientEntry
+  <StateEntry
       :initState="initState"
       :initDisabled="initDisabled"
       :amount="amount"
@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import IngredientEntry from "@/components/IngredientEntry";
+import StateEntry from "@/components/StateEntry";
 
 export default {
   name: "FermentationEntry",
-  components: {IngredientEntry},
+  components: {StateEntry},
   props: {
     initState: {
       default: "IDLE",

@@ -1,7 +1,7 @@
 <template>
   <div class="hops-container">
     <div class="hops-content" v-for="(hop, i) in this.computedHops" :key="'hops' + i + hop.name">
-      <IngredientEntry
+      <StateEntry
           :step="hop.add"
           :initState="hop.state"
           :initDisabled="stepIsDisabled(hop)"
@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import IngredientEntry from "@/components/IngredientEntry";
+import StateEntry from "@/components/StateEntry";
 
 export default {
   name: "HopsList",
-  components: {IngredientEntry},
+  components: {StateEntry},
   props: {
     initHops: {
       default: null,

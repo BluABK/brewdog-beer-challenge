@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "IngredientEntry",
+  name: "StateEntry",
   props: {
     initState: {
       default: "IDLE",

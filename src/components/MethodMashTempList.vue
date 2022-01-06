@@ -12,7 +12,7 @@
                  :state.sync="mashTemp.state"
                  :disabled.sync="mashTemp.disabled"
       />
-      <IngredientEntry v-else
+      <StateEntry v-else
                  :initState="mashTemp.state"
                  :initDisabled="stepIsDisabled(mashTemp)"
                  :amount="mashTemp.temp.value"
@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import IngredientEntry from "@/components/IngredientEntry";
+import StateEntry from "@/components/StateEntry";
 import CountdownEntry from "@/components/CountdownEntry";
 export default {
   name: "MethodMashTempList",
-  components: {IngredientEntry, CountdownEntry},
+  components: {StateEntry, CountdownEntry},
   props: {
     initMashTemps: {
       default: () => [],
