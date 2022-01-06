@@ -4,7 +4,7 @@
       {{state}}
     </button>
     {{description}}
-    <span v-if="this.state !== 'IDLE' && this.timeRemaining > 0">[{{timeRemainingString}}]</span>
+    <span v-if="this.state !== 'IDLE' && this.timeRemaining > 0">(Remaining: {{timeRemainingString}})</span>
   </div>
 </template>
 
@@ -103,11 +103,24 @@ export default {
     },
     timeRemainingString: function () {
       let s = "";
+      let spacing = "";
 
-      s = `Time Remaining：${this.days} days, ${this.hours} hours, ${this.minutes} minutes, ${this.seconds} seconds.`;
+      if (this.weeks > 0) {
+        s+= `${spacing}${this.weeks} week${this.weeks > 1 ? 's' : ''},`;
+        spacing = " ";
+      }
+      if (this.days > 0) {
+        s+= `${spacing}${this.days} day${this.days > 1 ? 's' : ''},`;
+        spacing = " ";
+      }
+      if (this.minutes > 0) {
+        s+= `${spacing}${this.minutes} minute${this.minutes > 1 ? 's' : ''},`;
+        spacing = " ";
+      }
+      // Always show seconds.
+      s += `${spacing}${this.seconds} second${this.minutes > 1 ? 's' : ''}.`;
 
       return s;
-
     },
     /**
      * Builds a description string based on provided properties.
