@@ -14,10 +14,10 @@
 |
 
 ### Dev Dependencies: Testing
-| Name                                                                              | Version    | Reason                                                   |
-|-----------------------------------------------------------------------------------|------------|----------------------------------------------------------|
-| [Jest](hhttps://vue-test-utils.vuejs.org/installation/#semantic-versioning)       | \>= 24.9.0 | Testing framework.                                       |
-| [Vue-CLI](https://www.npmjs.com/)                                                 | \>= 4.5.15 | Vue CLI required for Jest                                |
+| Name                                                                        | Version    | Reason                                                   |
+|-----------------------------------------------------------------------------|------------|----------------------------------------------------------|
+| [Jest](hhttps://vue-test-utils.vuejs.org/installation/#semantic-versioning) | \>= 24.9.0 | Testing framework.                                       |
+| [Vue-CLI](https://cli.vuejs.org/guide/installation.html)                    | \>= 4.5.15 | Vue CLI required for Jest                                |
 
 ### Install using NPM
 ```
