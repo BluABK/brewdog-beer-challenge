@@ -54,7 +54,7 @@ export default {
       }
 
       // Make sure the hop add step is of expected type, else error out.
-      if (["start", "middle", "end"].includes(hop.add) === false) {
+      if (["start", "middle", "end", "dry hop"].includes(hop.add) === false) {
         let msg = `Unhandled hop with unexpected add '${hop.add}'`;
         console.error(msg, hop);
         throw new Error(msg);
@@ -68,8 +68,8 @@ export default {
       // If done, then disable regardless add step.
       if (hop.state === "DONE") {
         return true;
-      } else if (hop.add === "start") {
-        // If add step is start then enable.
+      } else if (hop.add === "start" || hop.add === "dry hop") {
+        // If add step is start or dry hop then enable.
         return false;
       }
 
