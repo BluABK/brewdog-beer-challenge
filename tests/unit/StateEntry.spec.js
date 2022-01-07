@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import StateEntry from '@/components/StateEntry.vue'
 
 describe('HTML rendering', () => {
@@ -25,7 +25,7 @@ describe('Computed', () => {
   describe('description', () => {
     it('computes expected twist description', () => {
       const expected = 'Honey: 62.5g at End (WP), Coriander Seeds: 8.5g at 45mins.'
-      const wrapper = shallowMount(StateEntry, {
+      const wrapper = mount(StateEntry, {
         propsData: {
           twistDescription: "Honey: 62.5g at End (WP), Coriander Seeds: 8.5g at 45mins"
         }
