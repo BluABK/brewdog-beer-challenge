@@ -49,8 +49,10 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Design decisions
+* BeerList is the component that queries the API.
 * BeerList sends a copy of an API beer entry to BeerDetails (brewery) so that you can brew the same kind multiple times
   without having to query the API for a new set every time.
+* As per requirement the app keeps track of modification to a beer item and when you exit details screen, the beer is appended to a list for later use. It is currently not reachable by the end user, but in future it could be used for letting the user brew multiple beers at the same time, or to keep track of what they had done so far. 
 
 ### Assumptions
 * hop ordering implementation requirement only states that `add=end` can't be DONE until all the hops with `add=middle` are done, but I also made it depend on all the hops with `add=start` as that seemed more logical, however this can be swiftly changed by the removal of 21 chars in a single if statement.
