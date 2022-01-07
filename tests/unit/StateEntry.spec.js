@@ -3,28 +3,21 @@ import StateEntry from '@/components/StateEntry.vue'
 
 describe('HTML rendering', () => {
   it('renders props.state as "IDLE" when :initState is NOT passed', () => {
-    const state = 'IDLE'
-    const wrapper = shallowMount(StateEntry, {
-      // propData: { state }
-    })
-    // console.log(wrapper.text());
-    expect(wrapper.text()).toEqual(state)
+    const state = 'IDLE';
+    const wrapper = shallowMount(StateEntry);
+    expect(wrapper.text()).toEqual(state);
   })
 
   it('renders props.state equal to :initState when passed', () => {
-    const testInitState = 'TESTINGssss'
+    const testInitState = 'TESTING';
     const wrapper = shallowMount(StateEntry, {
       propsData: {
         initState: testInitState,
       }
     })
-    // console.log(wrapper.props())
-    // console.log(wrapper.data)
-    // // console.log(wrapper.text());
-    // console.log(wrapper)
-    // console.log(wrapper.vm.$data.state)
-    // console.log(wrapper.vm.state)
-    expect(wrapper.vm.$data.state).toEqual(testInitState)
+
+    // Assert
+    expect(wrapper.vm.$data.state).toEqual(testInitState);
   })
 })
 
@@ -37,7 +30,7 @@ describe('Computed', () => {
           twistDescription: "Honey: 62.5g at End (WP), Coriander Seeds: 8.5g at 45mins"
         }
       })
-      expect(wrapper.vm.description).toEqual(expected)
+      expect(wrapper.vm.description).toEqual(expected);
     })
 
     it('computes expected fermentation description', () => {
@@ -50,7 +43,42 @@ describe('Computed', () => {
           unit: "celsius"
         }
       })
-      expect(wrapper.vm.description).toEqual(expected)
+
+      // Assert
+      expect(wrapper.vm.description).toEqual(expected);
+    })
+
+    it('computes expected malt description', () => {
+      const expected = '3.63 kilograms Extra Pale.'
+      const wrapper = shallowMount(StateEntry, {
+        propsData: {
+          initState: "IDLE",
+          initDisabled: true,
+          amount: 3.63,
+          unit: "kilograms",
+          name: "Extra Pale"
+        }
+      })
+
+      // Assert
+      expect(wrapper.vm.description).toEqual(expected);
+    })
+
+    it('computes expected hops description', () => {
+      const expected = '2.5 grams Amarillo (bitter).'
+      const wrapper = shallowMount(StateEntry, {
+        propsData: {
+          initState: "IDLE",
+          initDisabled: true,
+          amount: 2.5,
+          unit: "grams",
+          name: "Amarillo",
+          attribute: "bitter"
+        }
+      })
+
+      // Assert
+      expect(wrapper.vm.description).toEqual(expected);
     })
   })
 
@@ -131,8 +159,10 @@ describe('Methods', () => {
         }
       })
 
+      // Perform action
       wrapper.vm.clickedButton();
 
+      // Assert
       expect(wrapper.vm.state).toEqual("TEST");
     })
 
@@ -160,6 +190,7 @@ describe('Methods', () => {
         }
       })
 
+      // Perform action
       wrapper.vm.clickedButton();
 
       // Wait until $emits have been handled
