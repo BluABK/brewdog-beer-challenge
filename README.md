@@ -44,6 +44,11 @@ npm run build-into-docs
 npm run lint
 ```
 
+### Running unit test suites (Jest)
+```
+npm run test:unit
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
