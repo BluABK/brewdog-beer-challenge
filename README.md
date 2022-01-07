@@ -11,7 +11,6 @@
 | [NPM](https://www.npmjs.com/)                    | \>=8.3.0   | NodeJS package manager.                                   |
 | [Vue](https://vuejs.org/)                        | 2.6.11     | Progressive JavaScript framework the web app is built on. |
 | [Axios](https://axios-http.com/docs/intro)       | 0.24.0     | API request handling for PUNK API v2.                     |
-|
 
 ### Dev Dependencies: Testing
 | Name                                                                        | Version    | Reason                                                   |
