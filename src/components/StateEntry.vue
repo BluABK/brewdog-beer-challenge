@@ -110,13 +110,10 @@ export default {
     }
   },
   methods: {
-    setDone: function() {
-      this.state = "DONE";
-      this.$emit("update:disabled", true);
-    },
     clickedButton: function () {
       if (this.disabled) return;
-      this.setDone();
+      this.state = "DONE";
+      this.$emit("update:disabled", true);
     }
   }
 }
