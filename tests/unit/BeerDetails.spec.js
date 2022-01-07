@@ -30,7 +30,7 @@ describe('BeerDetails.vue', () => {
         expect(renderedAttrToMatch).toEqual(sourceAttr);
     })
 
-    describe('Renders ingredients and methods', () => {
+    describe('Renders ingredients', () => {
         it('Renders hops', () => {
             const selectedBeer = sourceBeers[0];
             const wrapper = mount(BeerDetails, {
@@ -65,8 +65,60 @@ describe('BeerDetails.vue', () => {
             expect(renderedMaltDescriptions).toEqual(sourceMaltDescriptions)
         })
 
-        describe('Renders methods', () => {
+    })
 
+    describe('Renders methods', () => {
+        it('mash temperatures', () => {
+            const selectedBeer = sourceBeers[2];
+            const wrapper = mount(BeerDetails, {
+                propsData: {
+                    initBeer: selectedBeer
+                }
+            });
+
+            const entries = wrapper.find('.ingredients-content').find('.methods').find('.method-mashtemps-container').findAll('.mashtemp-content');
+
+            let allEntriesPresent = true;
+            for (let entry of entries.wrappers) {
+                if (!entry.find('.countdown-entry').exists()) allEntriesPresent = false;
+                if (!entry.find('button').exists()) allEntriesPresent = false;
+                if (!entry.find('.description').exists()) allEntriesPresent = false;
+            }
+
+            // Assert all entries are present and of correct amount.
+            expect(allEntriesPresent && entries.length === selectedBeer.method.mash_temp.length).toEqual(true);
+        })
+
+        it('fermentation', () => {
+            const selectedBeer = sourceBeers[2];
+            const wrapper = mount(BeerDetails, {
+                propsData: {
+                    initBeer: selectedBeer
+                }
+            });
+
+            const entry = wrapper.find('.ingredients-content').find('.methods').find('.methods-fermentation').find('.state-entry-element');
+            const button = entry.find('button')
+            const description = entry.find('.description')
+
+            expect(button.exists() && description.exists()).toEqual(true)
+        })
+
+        it('twist', () => {
+            const selectedBeer = sourceBeers[2];
+            const wrapper = mount(BeerDetails, {
+                propsData: {
+                    initBeer: selectedBeer
+                }
+            });
+
+            const entry = wrapper.find('.ingredients-content').find('.methods').find('.methods-twist').find('.state-entry-element');
+            const button = entry.find('button')
+            const description = entry.find('.description')
+
+            expect(button.exists() && description.exists()).toEqual(true)
         })
     })
+
+
 })

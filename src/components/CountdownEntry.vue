@@ -3,7 +3,9 @@
     <button class="action-button" @click="clickedButton()" :disabled="disabled">
       {{state}}
     </button>
-    {{description}}
+    <span class="description">
+      {{description}}
+    </span>
     <span v-if="this.state !== 'IDLE' && this.timeRemaining > 0">(Remaining: {{timeRemainingString}})</span>
   </div>
 </template>
