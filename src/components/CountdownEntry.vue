@@ -213,6 +213,8 @@ export default {
         } else if (this.timerEnabled) {
           this.pause();
         }
+      } else {
+        if (!this.disabled) this.setDone();
       }
     }
   },

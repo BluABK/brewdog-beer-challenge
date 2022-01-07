@@ -119,6 +119,4 @@ describe('BeerDetails.vue', () => {
             expect(button.exists() && description.exists()).toEqual(true)
         })
     })
-
-
 })
