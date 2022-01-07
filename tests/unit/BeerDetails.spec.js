@@ -69,7 +69,7 @@ describe('BeerDetails.vue', () => {
 
     describe('Renders methods', () => {
         it('mash temperatures', () => {
-            const selectedBeer = sourceBeers[2];
+            const selectedBeer = JSON.parse(JSON.stringify(sourceBeers[2]));
             const wrapper = mount(BeerDetails, {
                 propsData: {
                     initBeer: selectedBeer
@@ -90,7 +90,7 @@ describe('BeerDetails.vue', () => {
         })
 
         it('fermentation', () => {
-            const selectedBeer = sourceBeers[2];
+            const selectedBeer = JSON.parse(JSON.stringify(sourceBeers[2]));
             const wrapper = mount(BeerDetails, {
                 propsData: {
                     initBeer: selectedBeer
@@ -105,7 +105,7 @@ describe('BeerDetails.vue', () => {
         })
 
         it('twist', () => {
-            const selectedBeer = sourceBeers[2];
+            const selectedBeer = JSON.parse(JSON.stringify(sourceBeers[2]));
             const wrapper = mount(BeerDetails, {
                 propsData: {
                     initBeer: selectedBeer
