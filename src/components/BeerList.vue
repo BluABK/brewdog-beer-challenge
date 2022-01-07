@@ -45,7 +45,6 @@ export default {
   },
   data () {
     return {
-      // isVisible: false,
       errors: [],
       beers: []
     }
