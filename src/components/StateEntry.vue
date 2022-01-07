@@ -1,5 +1,5 @@
 <template>
-  <div class="two-state-element">
+  <div class="state-entry-element">
     <button class="action-button" @click="clickedButton()" :disabled="disabled">
       {{state}}
     </button>

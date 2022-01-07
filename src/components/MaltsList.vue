@@ -51,7 +51,6 @@ export default {
   watch: {
     state: {
       handler() {
-        console.info("update:state")
         this.$emit('update:state', this.state);
       },
       immediate: true
