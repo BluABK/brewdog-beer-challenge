@@ -7,7 +7,7 @@
 
     <div class="methods-fermentation methods-subheading" v-if="fermentation">
       <h1 class="">Fermentation</h1>
-      <FermentationEntry
+      <StateEntry
           :initState="fermentation.state"
           :initDisabled="stepIsDisabled(fermentation)"
           :amount="fermentation.temp.value"
@@ -19,10 +19,10 @@
 
     <div class="methods-twist methods-subheading" v-if="twist">
       <h1>Twist</h1>
-      <TwistEntry
+      <StateEntry
           :initState="twist.state"
           :initDisabled="stepIsDisabled(twist)"
-          :description="twist.description"
+          :twistDescription="twist.description"
           :state.sync="twist.state"
           :disabled.sync="twist.disabled"
       />
@@ -32,12 +32,11 @@
 </template>
 
 <script>
-import TwistEntry from "@/components/TwistEntry";
-import FermentationEntry from "@/components/FermentationEntry";
+import StateEntry from "@/components/StateEntry";
 import MethodMashTempList from "@/components/MethodMashTempList";
 export default {
   name: "MethodsList",
-  components: {FermentationEntry, TwistEntry, MethodMashTempList},
+  components: {StateEntry, MethodMashTempList},
   props: {
     initMashTemps: {
       default: () => [],

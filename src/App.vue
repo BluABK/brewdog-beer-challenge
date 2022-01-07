@@ -34,7 +34,6 @@ export default {
   },
   methods: {
     selectBeer: function (beer) {
-      console.info("Show details for beer", beer);
       this.selectedBeer = beer;
       this.showBeerDetails();
     },
